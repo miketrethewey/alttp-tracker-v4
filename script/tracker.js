@@ -65,7 +65,39 @@ function toggleMedallion(n) {
   document.getElementById("medallion" + n).style.backgroundImage = "url(images/medallion" + medallions[n] + ".png)";
 }
 
+function print_lonk() {
+  document.write('    <table class="tracker" cellpadding="0" cellspacing="0" border="0" align="center">');
+  document.write('    <!-- Top left cell is Link. Dont move it. I cant make the CSS work any other way :( -->');
+  document.write('    <!-- EDIT: I guess I could do it similar to the boss squares, but thats annoying -->');
+  document.write('    <tr>');
+  document.write('      <td colspan="2" rowspan="2"id="tunic" style="background-image: url(images/tunic.png);">');
+  document.write('        <table cellpadding="0" cellspacing="0" class="stoops" border="0">');
+  document.write('          <tr>');
+  document.write('            <th onClick="toggle(\'tunic\')"></th>');
+  document.write('            <td id="sword" onClick="toggle(\'sword\')"></td>');
+  document.write('          </tr>');
+  document.write('          <tr>');
+  document.write('            <td id="shield" onClick="toggle(\'shield\')"></td>');
+  document.write('            <th>');
+  document.write('              <table cellpadding="0" cellspacing="0" border="0" class="lonk">');
+  document.write('                <tr>');
+  document.write('                  <th class="mini-corner" onClick="toggle(\'tunic\')"></th>');
+  document.write('                  <th onClick="toggle(\'tunic\')"></th>');
+  document.write('                </tr>');
+  document.write('                <tr>');
+  document.write('                  <th onClick="toggle(\'tunic\')"></th>');
+  document.write('                  <th id="moonpearl" class="false" style="background-image:url(images/moonpearl.png); width:48px; height:48px;" onClick="toggle(\'moonpearl\')"></th>');
+  document.write('                </tr>');
+  document.write('              </table>');
+  document.write('            </th>');
+  document.write('          </tr>');
+  document.write('        </table>');
+  document.write('      </td>');
+}
+
 function print_tracker() {
+  print_lonk();
+
   var itemList	= Object.keys(items);
   var k			= 4;
   while(k < itemList.length){
@@ -119,6 +151,6 @@ function print_tracker() {
 }
 
 function init() {
-  document.getElementById("sword").style.backgroundImage = "url(images/sword1.png)";
-  document.getElementById("shield").style.backgroundImage = "url(images/shield.png)";
+  document.getElementById("sword").style.backgroundImage	= "url(images/sword1.png)";
+  document.getElementById("shield").style.backgroundImage	= "url(images/shield.png)";
 }
