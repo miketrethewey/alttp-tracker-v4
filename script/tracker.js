@@ -133,6 +133,16 @@ function toggleDungeon(n) {
     prizes[n] = 0;
   }
   $("dungeonPrize" + n).style.backgroundImage = "url(images/dungeon" + prizes[n] + ".png)";
+
+  if(isMap) {
+    // Update Sahasralah, Fat Fairy, and Master Sword Pedestal
+    var pendantChests = [25, 61, 62];
+    for(k = 0; k < pendantChests.length; k++) {
+      if(!chests[pendantChests[k]].isOpened) {
+        document.getElementById(pendantChests[k]).className = "chest " + chests[pendantChests[k]].isAvailable();
+      }
+    }
+  }
 }
 
 // event of clicking on Mire/TRock's medallion subsquare
@@ -142,6 +152,28 @@ function toggleMedallion(n) {
     medallions[n] = 0;
   }
   $("medallion" + n).style.backgroundImage = "url(images/medallion" + medallions[n] + ".png)";
+
+  if(isMap) {
+    // Update availability of dungeon boss AND chests
+    dungeons[8 + n].isBeaten = !dungeons[8 + n].isBeaten;
+    toggleBoss(8 + n);
+    if(items["chest" + (8 + n)] > 0) {
+      document.getElementById("dungeon" + (8 + n)).className = "dungeon " + dungeons[8 + n].canGetChest();
+    }
+    // TRock medallion affects Mimic Cave
+    if(n == 1){
+      chests[4].isOpened = !chests[4].isOpened;
+      toggleChest(4);
+    }
+    // Change the mouseover text on the map
+    var dungeonName;
+    if(n == 0) {
+      dungeonName = "Misery Mire";
+    } else {
+      dungeonName = "Turtle Rock";
+    }
+    dungeons[8 + n].name = dungeonName + " <img src='images/medallion" + medallions[n] + ".png' class='mini'><img src='images/lantern.png' class='mini'>";
+  }
 }
 
 function build_lonk() {
