@@ -13,10 +13,10 @@ function toggle(label) {
       items[label] = itemsMax[label];
       $(label).style.backgroundImage = ("url(images/chest" + items[label] + ".png)");
     x = label.substring(5);
-    if(items[label] == 0)
-      $("dungeon" + x).className = "dungeon opened";
-    else
-      $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
+//    if(items[label] == 0)
+//      $("dungeon" + x).className = "dungeon opened";
+//    else
+//      $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
     return;
   }
 

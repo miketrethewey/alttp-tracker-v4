@@ -1,6 +1,11 @@
 body {
   background-color: rgb(16,16,16);
+  color:            rgb(255,255,255);
   margin:           0;
+}
+
+a {
+  color: rgb(255,255,255);
 }
 
 .tracker {
