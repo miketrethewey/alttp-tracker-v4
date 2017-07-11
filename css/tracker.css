@@ -1,0 +1,41 @@
+body {
+  background-color: rgb(16,16,16);
+  margin:           0;
+}
+
+.tracker {
+  background-color: rgb(0,0,0);
+  position:         absolute;
+  left:             0;
+  top:              0;
+}
+
+td {
+  background-repeat: no-repeat;
+  width:             64px;
+  height:            64px;
+}
+
+.stoops {
+  background-size: 200% 200%;
+  width:           128;
+  height:          128;
+}
+
+.lonk {
+   width:  64px;
+   height: 64px;
+}
+
+.corner {
+  width:  32px;
+  height: 32px;
+}
+
+.true {
+  opacity: 1;
+}
+
+.false {
+  opacity: 0.25;
+}
