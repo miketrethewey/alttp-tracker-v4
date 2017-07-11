@@ -381,6 +381,10 @@ function print_tracker() {
   }
   tracker.appendChild(tr);
   $("tracker").appendChild(tracker);
+
+  if(! isMap) {
+    $("map").style.display = "none";
+  }
 }
 
 function init() {
