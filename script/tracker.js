@@ -1,6 +1,7 @@
 var rowLength   = 7;
 var prizes      = [];
 var medallions  = [0, 0];
+var isMap       = false;
 
 function $(e) {
   return document.getElementById(e);
@@ -14,10 +15,13 @@ function toggle(label) {
     }
     $(label).style.backgroundImage = ("url(images/chest" + items[label] + ".png)");
     x = label.substring(5);
-//    if(items[label] == 0)
-//      $("dungeon" + x).className = "dungeon opened";
-//    else
-//      $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
+    if(isMap) {
+      if(items[label] == 0) {
+        $("dungeon" + x).className = "dungeon opened";
+      } else {
+        $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
+      }
+    }
     return;
   }
 
@@ -36,9 +40,32 @@ function toggle(label) {
     }
   }
 
+  if(isMap) {
+    for(k = 0; k < chests.length; k++) {
+      if(!chests[k].isOpened) {
+        $(k).className = "chest " + chests[k].isAvailable();
+      }
+    }
+    for(k = 0; k < dungeons.length; k++) {
+      if(!dungeons[k].isBeaten) {
+        $("bossMap" + k).className = "boss " + dungeons[k].isBeatable();
+      }
+      if(items["chest"+k]) {
+        $("dungeon" + k).className = "dungeon " + dungeons[k].canGetChest();
+      }
+    }
+  }
+
   // Initiate bunny graphics!
   if(label == "moonpearl" || label == "tunic") {
     togglePearl();
+  }
+
+  // Clicking a boss on the tracker will check it off on the map!
+  if(isMap) {
+    if(label.substring(0,4) == "boss") {
+      toggleBoss(label.substring(4));
+    }
   }
 }
 
@@ -55,6 +82,48 @@ function togglePearl() {
   link += ".png)";
 
   $("tunic").style.backgroundImage = link;
+}
+
+// Event of clicking a chest on the map
+function toggleChest(x) {
+  chests[x].isOpened = !chests[x].isOpened;
+  if(chests[x].isOpened) {
+    $(x).className = "chest opened";
+  } else {
+    $(x).className = "chest " + chests[x].isAvailable();
+  }
+}
+
+// Event of clicking a dungeon location (not really)
+function toggleBoss(x) {
+  dungeons[x].isBeaten = !dungeons[x].isBeaten;
+  if(dungeons[x].isBeaten) {
+    $("bossMap" + x).className = "boss opened";
+  } else {
+    $("bossMap" + x).className = "boss " + dungeons[x].isBeatable();
+  }
+}
+
+// Highlights a chest location and shows the name as caption
+function highlight(x) {
+  $(x).style.backgroundImage = "url(images/highlighted.png)";
+  $("caption").innerHTML = chests[x].name;
+}
+
+function unhighlight(x) {
+  $(x).style.backgroundImage = "url(images/poi.png)";
+  $("caption").innerHTML = "&nbsp;";
+}
+
+// Highlights a chest location and shows the name as caption (but for dungeons)
+function highlightDungeon(x) {
+  $("dungeon" + x).style.backgroundImage = "url(images/highlighted.png)";
+  $("caption").innerHTML = dungeons[x].name;
+}
+
+function unhighlightDungeon(x) {
+  $("dungeon" + x).style.backgroundImage = "url(images/poi.png)";
+  $("caption").innerHTML = "&nbsp;";
 }
 
 // event of clicking on a boss's pendant/crystal subsquare
