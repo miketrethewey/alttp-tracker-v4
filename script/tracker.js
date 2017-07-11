@@ -75,44 +75,136 @@ function toggleMedallion(n) {
   $("medallion" + n).style.backgroundImage = "url(images/medallion" + medallions[n] + ".png)";
 }
 
-function print_lonk() {
-  document.write('    <table class="tracker" cellpadding="0" cellspacing="0" border="0" align="center">');
-  document.write('    <!-- Top left cell is Link. Dont move it. I cant make the CSS work any other way :( -->');
-  document.write('    <!-- EDIT: I guess I could do it similar to the boss squares, but thats annoying -->');
-  document.write('    <tr>');
-  document.write('      <td colspan="2" rowspan="2"id="tunic" style="background-image: url(images/tunic.png);">');
-  document.write('        <table cellpadding="0" cellspacing="0" class="stoops" border="0">');
-  document.write('          <tr>');
-  document.write('            <th onClick="toggle(\'tunic\')"></th>');
-  document.write('            <td id="sword" onClick="toggle(\'sword\')"></td>');
-  document.write('          </tr>');
-  document.write('          <tr>');
-  document.write('            <td id="shield" onClick="toggle(\'shield\')"></td>');
-  document.write('            <th>');
-  document.write('              <table cellpadding="0" cellspacing="0" border="0" class="lonk">');
-  document.write('                <tr>');
-  document.write('                  <th class="mini-corner" onClick="toggle(\'tunic\')"></th>');
-  document.write('                  <th onClick="toggle(\'tunic\')"></th>');
-  document.write('                </tr>');
-  document.write('                <tr>');
-  document.write('                  <th onClick="toggle(\'tunic\')"></th>');
-  document.write('                  <th id="moonpearl" class="false" style="background-image:url(images/moonpearl.png); width:48px; height:48px;" onClick="toggle(\'moonpearl\')"></th>');
-  document.write('                </tr>');
-  document.write('              </table>');
-  document.write('            </th>');
-  document.write('          </tr>');
-  document.write('        </table>');
-  document.write('      </td>');
+function build_lonk() {
+  // Build Lonk Table
+  // td
+  var lonkTd = document.createElement("td");
+  lonkTd.id = "tunic";
+  lonkTd.style.backgroundImage = "url(images/tunic.png)";
+  lonkTd.setAttribute("colspan",2);
+  lonkTd.setAttribute("rowspan",2);
+
+    // td table
+  var lonkTable = document.createElement("table");
+  lonkTable.className = "stoops";
+  lonkTable.setAttribute("border",0);
+  lonkTable.setAttribute("cellpadding",0);
+  lonkTable.setAttribute("cellspacing",0);
+
+      // td table tr
+  var lonkTr = document.createElement("tr");
+
+        //  td table tr th
+  var lonkTh = document.createElement("th");
+  lonkTh.setAttribute("onclick","toggle('tunic')");
+
+        // Add Tunic
+  lonkTr.appendChild(lonkTh);
+
+        //  td table tr td : Build Sword
+  var td = document.createElement("td");
+  td.id = "sword";
+  td.setAttribute("onclick","toggle('sword')");
+
+        // Add Sword
+  lonkTr.appendChild(td);
+
+      // Add row
+  lonkTd.appendChild(lonkTr);
+
+      // td table tr : Shield
+  lonkTr = document.createElement("tr");
+
+        // td table tr td : Build Shield
+  td = document.createElement("td");
+  td.id = "shield";
+  td.setAttribute("onclick","toggle('shield')");
+
+        // Add Shield
+  lonkTr.appendChild(td);
+
+        // td table tr th
+  lonkTh = document.createElement("th");
+
+          // td table tr th table : Pearl Table
+  var pearlTable = document.createElement("table");
+  pearlTable.className = "lonk";
+  pearlTable.setAttribute("border",0);
+  pearlTable.setAttribute("cellpadding",0);
+  pearlTable.setAttribute("cellspacing",0);
+
+            // td table tr th table tr : Tunic
+  var pearlTableTr = document.createElement("tr");
+
+              // td table tr th table tr th : Build Tunic (1)
+  var pearlTableTrTh = document.createElement("th");
+  pearlTableTrTh.className = "mini-corner";
+  pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+
+            // Add Tunic (1)
+  pearlTableTr.appendChild(pearlTableTrTh);
+
+              // td table tr th table tr th : Build Tunic (2)
+  pearlTableTrTh = document.createElement("th");
+  pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+
+            // Add Tunic (2)
+  pearlTableTr.appendChild(pearlTableTrTh);
+
+          // Add Tunic
+  pearlTable.appendChild(pearlTableTr);
+
+        // td table tr th table tr : Tunic, Pearl
+  pearlTableTr = document.createElement("tr");
+
+          // td table tr th table tr th : Build Tunic
+  pearlTableTrTh = document.createElement("th");
+  pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+
+        // Add Tunic
+  pearlTableTr.appendChild(pearlTableTrTh);
+
+          // td table tr th table tr th : Build Pearl
+  pearlTableTrTh = document.createElement("th");
+  pearlTableTrTh.id = "moonpearl";
+  pearlTableTrTh.className = "false";
+  pearlTableTrTh.style.backgroundImage = "url(images/moonpearl.png)";
+  pearlTableTrTh.style.width = "48px";
+  pearlTableTrTh.style.height = "48px";
+  pearlTableTrTh.setAttribute("onclick","toggle('moonpearl')");
+
+        // Add Pearl
+  pearlTableTr.appendChild(pearlTableTrTh);
+
+    // Add Tunic, Pearl
+  pearlTable.appendChild(pearlTableTr);
+
+  lonkTh.appendChild(pearlTable);
+
+  lonkTr.appendChild(lonkTh);
+
+  lonkTd.appendChild(lonkTr);
+
+  return lonkTd;
 }
 
 function print_tracker() {
-  print_lonk();
+  var tracker = document.createElement("table");
+  tracker.className = "tracker";
+  tracker.setAttribute("align","center");
+  tracker.setAttribute("border",0);
+  tracker.setAttribute("cellpadding",0);
+  tracker.setAttribute("cellspacing",0);
+
+  var tr = document.createElement("tr");
+  tr.appendChild(build_lonk());
 
   var itemList  = Object.keys(items);
   var k     = 4;
   while(k < itemList.length) {
     if(k != 4) {
-      document.write("<tr>");
+      tracker.appendChild(tr);
+      tr = document.createElement("tr");
     }
     for(j = 0; j < rowLength; j++) {
       if(k == 4 || k == 9) {
@@ -125,42 +217,69 @@ function print_tracker() {
           var d = prizes.length;
           prizes[d] = 0;
 
-          document.write("<td id='" + x + "' style='background-image:url(images/" + x + ".png);'>");
-          document.write("<table cellpadding='0' cellspacing='0' class='lonk'>");
-            document.write("<tr>");
-              document.write("<th onClick='toggle(" + '"' + x + '"' + ")'></th>");
-              document.write("<th onClick='toggle(" + '"' + x + '"' + ")'></th>");
-            document.write("</tr>");
-            document.write("<tr>");
+          var bossTd  = document.createElement("td");
+          bossTd.id   = x;
+          bossTd.style.backgroundImage = "url(images/" + x + ".png)";
+
+          var bossTdTable = document.createElement("table");
+          bossTdTable.setAttribute("cellpadding",0);
+          bossTdTable.setAttribute("cellspacing",0);
+          bossTdTable.className = "lonk";
+
+          var bossTdTableTr   = document.createElement("tr");
+          var bossTdTableTrTh = document.createElement("th");
+          bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
+          bossTdTableTrTh.setAttribute("colspan",2);
+
+          bossTdTableTr.appendChild(bossTdTableTrTh);
+          bossTdTable.appendChild(bossTdTableTr);
+
+          bossTdTableTr = document.createElement("tr");
+          var bossTdTableTrTh = document.createElement("th");
+
               // Does dungeon have a medallion?
               if(d >= 8) {
-                document.write("<th id='medallion" + (d - 8) + "' onClick='toggleMedallion(" + (d - 8) + ")' class='corner' style='background-image:url(images/medallion0.png)'></th>");
+            bossTdTableTrTh.id = "medallion" + (d - 8);
+            bossTdTableTrTh.setAttribute("onclick","toggleMedallion('" + (d - 8) + "')");
+            bossTdTableTrTh.className = "corner";
+            bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
               } else {
-                document.write("<th onClick='toggle(" + '"' + x + '"' + ")'></th>");
+            bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
               }
-              document.write("<th id='dungeonPrize" + d + "' onClick='toggleDungeon(" + d + ")' class='corner' style='background-image:url(images/dungeon0.png)'></th>");
-            document.write("</tr>");
-            document.write("</table>");
-          document.write("</td>");
+          bossTdTableTr.appendChild(bossTdTableTrTh);
+
+          bossTdTableTrTh = document.createElement("th");
+          bossTdTableTrTh.id = "dungeonPrize" + d;
+          bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
+          bossTdTableTrTh.className = "corner";
+          bossTdTableTrTh.style.backgroundImage = "url(images/dungeon0.png)";
+          bossTdTableTr.appendChild(bossTdTableTrTh);
+
+          bossTdTable.appendChild(bossTdTableTr);
+
+          bossTd.appendChild(bossTdTable);
+
+          tr.appendChild(bossTd);
         } else {
+          var square = document.createElement("td");
           if(x.substring(0,5) == "chest") {
-            document.write("<td style='background-image:url(images/chest" + items[x] + ".png);' ");
+            square.style.backgroundImage = "url(images/chest" + items[x] + ".png)";
           } else {
-            document.write("<td style='background-image:url(images/" + x + ".png);' ");
+            square.style.backgroundImage = "url(images/" + x + ".png)";
           }
-          document.write("id='" + x + "' ");
-          document.write("class='" + !!items[x] + "' ");
-          document.write("onClick='toggle(" + '"' + x + '"' + ")'>");
-          document.write("</td>");
+          square.id = x;
+          square.className = !!items[x];
+          square.setAttribute("onclick","toggle('" + x + "')");
+          tr.appendChild(square);
         }
 
       if(++k == itemList.length) {
         break;
       }
     }
-    document.write("</tr>");
   }
-  document.write('</table>');
+  tracker.appendChild(tr);
+  $("tracker").appendChild(tracker);
 }
 
 function init() {
