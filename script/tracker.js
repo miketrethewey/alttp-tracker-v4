@@ -386,7 +386,9 @@ function print_tracker() {
   tracker.appendChild(tr);
   $("tracker").appendChild(tracker);
 
-  if(! isMap) {
+  if(isMap) {
+    print_map_chests();
+  } else {
     $("map").style.display = "none";
   }
 }
