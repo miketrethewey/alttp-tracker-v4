@@ -7,6 +7,10 @@ function $(e) {
   return document.getElementById(e);
 }
 
+function mini(img) {
+  return '<img src="images/' + img + '.png" class="mini" />';
+}
+
 // Event of clicking on the item tracker
 function toggle(label) {
   if(label.substring(0,5) == "chest") {
@@ -172,7 +176,7 @@ function toggleMedallion(n) {
     } else {
       dungeonName = "Turtle Rock";
     }
-    dungeons[8 + n].name = dungeonName + " <img src='images/medallion" + medallions[n] + ".png' class='mini'><img src='images/lantern.png' class='mini'>";
+    dungeons[8 + n].name = dungeonName + " " + mini("medallion" + medallions[n]) + " " + mini("lantern");
   }
 }
 
