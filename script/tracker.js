@@ -212,66 +212,66 @@ function print_tracker() {
       }
       var x = itemList[k];
 
-        // boss tables (pendant/crystal, medallion)
-        if(x.substring(0,4) == "boss") {
-          var d = prizes.length;
-          prizes[d] = 0;
+      // boss tables (pendant/crystal, medallion)
+      if(x.substring(0,4) == "boss") {
+        var d = prizes.length;
+        prizes[d] = 0;
 
-          var bossTd  = document.createElement("td");
-          bossTd.id   = x;
-          bossTd.style.backgroundImage = "url(images/" + x + ".png)";
+        var bossTd                    = document.createElement("td");
+        bossTd.id                     = x;
+        bossTd.style.backgroundImage  = "url(images/" + x + ".png)";
 
-          var bossTdTable = document.createElement("table");
-          bossTdTable.setAttribute("cellpadding",0);
-          bossTdTable.setAttribute("cellspacing",0);
-          bossTdTable.className = "lonk";
+        var bossTdTable       = document.createElement("table");
+        bossTdTable.className = "lonk";
+        bossTdTable.setAttribute("cellpadding",0);
+        bossTdTable.setAttribute("cellspacing",0);
 
-          var bossTdTableTr   = document.createElement("tr");
-          var bossTdTableTrTh = document.createElement("th");
-          bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
-          bossTdTableTrTh.setAttribute("colspan",2);
+        var bossTdTableTr   = document.createElement("tr");
+        var bossTdTableTrTh = document.createElement("th");
+        bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
+        bossTdTableTrTh.setAttribute("colspan",2);
 
-          bossTdTableTr.appendChild(bossTdTableTrTh);
-          bossTdTable.appendChild(bossTdTableTr);
+        bossTdTableTr.appendChild(bossTdTableTrTh);
+        bossTdTable.appendChild(bossTdTableTr);
 
-          bossTdTableTr = document.createElement("tr");
-          var bossTdTableTrTh = document.createElement("th");
+        bossTdTableTr = document.createElement("tr");
+        var bossTdTableTrTh = document.createElement("th");
 
-              // Does dungeon have a medallion?
-              if(d >= 8) {
-            bossTdTableTrTh.id = "medallion" + (d - 8);
-            bossTdTableTrTh.setAttribute("onclick","toggleMedallion('" + (d - 8) + "')");
-            bossTdTableTrTh.className = "corner";
-            bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
-              } else {
-            bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
-              }
-          bossTdTableTr.appendChild(bossTdTableTrTh);
-
-          bossTdTableTrTh = document.createElement("th");
-          bossTdTableTrTh.id = "dungeonPrize" + d;
-          bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
-          bossTdTableTrTh.className = "corner";
-          bossTdTableTrTh.style.backgroundImage = "url(images/dungeon0.png)";
-          bossTdTableTr.appendChild(bossTdTableTrTh);
-
-          bossTdTable.appendChild(bossTdTableTr);
-
-          bossTd.appendChild(bossTdTable);
-
-          tr.appendChild(bossTd);
+        // Does dungeon have a medallion?
+        if(d >= 8) {
+          bossTdTableTrTh.id                    = "medallion" + (d - 8);
+          bossTdTableTrTh.className             = "corner";
+          bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
+          bossTdTableTrTh.setAttribute("onclick","toggleMedallion('" + (d - 8) + "')");
         } else {
-          var square = document.createElement("td");
-          if(x.substring(0,5) == "chest") {
-            square.style.backgroundImage = "url(images/chest" + items[x] + ".png)";
-          } else {
-            square.style.backgroundImage = "url(images/" + x + ".png)";
-          }
-          square.id = x;
-          square.className = !!items[x];
-          square.setAttribute("onclick","toggle('" + x + "')");
-          tr.appendChild(square);
+          bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
         }
+        bossTdTableTr.appendChild(bossTdTableTrTh);
+
+        bossTdTableTrTh                       = document.createElement("th");
+        bossTdTableTrTh.id                    = "dungeonPrize" + d;
+        bossTdTableTrTh.className             = "corner";
+        bossTdTableTrTh.style.backgroundImage = "url(images/dungeon0.png)";
+        bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
+        bossTdTableTr.appendChild(bossTdTableTrTh);
+
+        bossTdTable.appendChild(bossTdTableTr);
+
+        bossTd.appendChild(bossTdTable);
+
+        tr.appendChild(bossTd);
+      } else {
+        var square = document.createElement("td");
+        if(x.substring(0,5) == "chest") {
+          square.style.backgroundImage = "url(images/chest" + items[x] + ".png)";
+        } else {
+          square.style.backgroundImage = "url(images/" + x + ".png)";
+        }
+        square.id = x;
+        square.className = !!items[x];
+        square.setAttribute("onclick","toggle('" + x + "')");
+        tr.appendChild(square);
+      }
 
       if(++k == itemList.length) {
         break;
