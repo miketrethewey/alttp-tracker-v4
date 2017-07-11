@@ -7,36 +7,40 @@
   <script src="script/tracker.js"></script>
 </head>
 <body>
-  <table class="tracker" cellpadding="0" cellspacing="0" border="0" align="center">
-    <!-- Top left cell is Link. Don't move it. I can't make the CSS work any other way :( -->
-    <!-- EDIT: I guess I could do it similar to the boss squares, but that's annoying -->
-    <tr>
-      <td colspan='2' rowspan='2'id='tunic' style='background-image: url(images/tunic.png);'>
-        <table cellpadding='0' cellspacing='0' class='stoops' border='0'>
-          <tr>
-            <th onClick="toggle('tunic')"></th>
-            <td id='sword' onClick="toggle('sword')"></td>
-          </tr>
-          <tr>
-            <td id='shield' onClick="toggle('shield')"></td>
-            <th>
-              <table cellpadding='0' cellspacing='0' border='0' class="lonk">
-                <tr>
-                  <th class='mini-corner' onClick="toggle('tunic')"></th>
-                  <th onClick="toggle('tunic')"></th>
-                </tr>
-                <tr>
-                  <th onClick="toggle('tunic')"></th>
-                  <th id="moonpearl" class='false' style='background-image:url(images/moonpearl.png); width:48px; height:48px;' onClick='toggle("moonpearl")'></th>
-                </tr>
-              </table>
-            </th>
-          </tr>
-        </table>
-      </td>
+  <div id="tracker">
+    <table class="tracker" cellpadding="0" cellspacing="0" border="0" align="center">
+      <!-- Top left cell is Link. Don't move it. I can't make the CSS work any other way :( -->
+      <!-- EDIT: I guess I could do it similar to the boss squares, but that's annoying -->
+      <tr>
+        <td colspan='2' rowspan='2'id='tunic' style='background-image: url(images/tunic.png);'>
+          <table cellpadding='0' cellspacing='0' class='stoops' border='0'>
+            <tr>
+              <th onClick="toggle('tunic')"></th>
+              <td id='sword' onClick="toggle('sword')"></td>
+            </tr>
+            <tr>
+              <td id='shield' onClick="toggle('shield')"></td>
+              <th>
+                <table cellpadding='0' cellspacing='0' border='0' class="lonk">
+                  <tr>
+                    <th class='mini-corner' onClick="toggle('tunic')"></th>
+                    <th onClick="toggle('tunic')"></th>
+                  </tr>
+                  <tr>
+                    <th onClick="toggle('tunic')"></th>
+                    <th id="moonpearl" class='false' style='background-image:url(images/moonpearl.png); width:48px; height:48px;' onClick='toggle("moonpearl")'></th>
+                  </tr>
+                </table>
+              </th>
+            </tr>
+          </table>
+        </td>
 <script>
 print_tracker();
 init();
 </script>
+  </div>
+  <div id="map"></div>
+  <div id="disclaimer">Not supported by crossproduct. Please support the <a href="http://www.twitch.tv/crossproduct/">official release</a>.</div>
 </body>
 </html>
