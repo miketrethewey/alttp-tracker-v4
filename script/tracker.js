@@ -370,7 +370,7 @@ function print_tracker() {
 
         var bossTd                    = document.createElement("td");
         bossTd.id                     = x;
-        bossTd.style.backgroundImage  = "url(images/" + x + ".png)";
+        bossTd.style.backgroundImage  = "url(" + build_img_url(x) + ')';
 
         var bossTdTable       = document.createElement("table");
         bossTdTable.className = "lonk trackerSquare bossSquare";
@@ -446,9 +446,6 @@ function print_tracker() {
 }
 
 function init() {
-  isMap   = getQuery("map")   != "";
-  isOpen  = getQuery("open")  != "";
-
   print_tracker();
 
   if(isMap) {
@@ -468,7 +465,7 @@ function init() {
   var select  = document.createElement("select");
   select.id   = "theme";
   select.name = "theme";
-  var themes  = ["default","vanilla"];
+  var themes  = ["default","retro","vanilla"];
   for(var t in themes) {
     t                 = themes[t];
     var option        = document.createElement("option");
@@ -484,10 +481,9 @@ function init() {
   var label = document.createElement("label");
   var input = document.createElement("input");
 
-  input.id      = "map";
-  input.name    = "map";
-  input.type    = "checkbox";
-  input.checked = isMap;
+  input.id    = "map";
+  input.name  = "map";
+  input.type  = "checkbox";
   input.setAttribute("onchange",'$("form").submit()');
   span.appendChild(input);
 
@@ -501,10 +497,9 @@ function init() {
   span  = document.createElement("span");
   label = document.createElement("label");
   input = document.createElement("input");
-  input.id      = "open";
-  input.name    = "open";
-  input.type    = "checkbox";
-  input.checked = isOpen;
+  input.id    = "open";
+  input.name  = "open";
+  input.type  = "checkbox";
   input.setAttribute("onchange",'$("map").checked="on";$("form").submit()');
   span.appendChild(input);
 
@@ -515,7 +510,9 @@ function init() {
   form.appendChild(span);
   form.innerHTML += "<br />";
 
-  $("theme").selectedIndex = themes.indexOf(selectedTheme.toLowerCase());
+  $("map").checked          = isMap;
+  $("open").checked         = isOpen;
+  $("theme").selectedIndex  = themes.indexOf(selectedTheme.toLowerCase());
 
   if(isOpen) {
     var openChests = [56,57,58];
@@ -529,5 +526,7 @@ function init() {
   }
 
   $("shield").style.backgroundImage = "url(" + build_img_url("shield") + ')';
+
+  document.getElementsByTagName("body")[0].className = selectedTheme.toLowerCase();
 }
 

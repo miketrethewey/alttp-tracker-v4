@@ -26,12 +26,17 @@ function getQuery(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+function stoopsLonkTheme() {
+  return selectedTheme == "" || selectedTheme == "default" || selectedTheme == "retro";
+}
+
 function build_img_url(fname,useTheme = selectedTheme) {
   var defaultRoot = "images/";
   var themeRoot   = defaultRoot;
 
-  var checkForSupport         = ["bomb","agahnim","boss","dungeon","medallion0"];
+  var checkForSupport         = ["bomb","boss","chest","agahnim","boss","dungeon","medallion0"];
   var supportedByTheme        = [];
+  supportedByTheme["retro"]   = ["boss","chest","agahnim","dungeon","medallion0"];
   supportedByTheme["vanilla"] = ["dungeon","medallion0"];
 
   var hasSupport = true;
@@ -55,7 +60,8 @@ function build_img_url(fname,useTheme = selectedTheme) {
     medallion1: "bombos",
     medallion2: "ether",
     medallion3: "quake",
-    dungeon4:   "pendant0"
+    dungeon4:   "pendant0",
+    ".png":     ""
   };
 
   for(var replace in globalReplace) {
@@ -72,12 +78,21 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   switch(useTheme) {
+    case "retro":
+      themeRoot = "BONUS/DLC%20Icons/Retro/";
+      break;
     case "vanilla":
       themeRoot = "BONUS/DLC%20Icons/Vanilla/";
       break;
     default:
       themeRoot = defaultRoot;
       break;
+  }
+
+  if(fname.indexOf("chest") > -1) {
+    themeRoot += "chests/";
+  } else if(fname.indexOf("boss") > -1) {
+    themeRoot += "bosses/";
   }
 
   return themeRoot + fname + ".png";
@@ -98,3 +113,5 @@ function steve() {
 }
 
 selectedTheme = getQuery("theme") != "" ? getQuery("theme") : "default";
+isMap         = getQuery("map")   != "";
+isOpen        = getQuery("open")  != "";

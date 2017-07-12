@@ -23,7 +23,7 @@ function print_map_chests() {
   for(k = 0; k < dungeons.length; k++) {
     var span                    = document.createElement("span");
     span.id                     = "bossMap" + k;
-    span.style.backgroundImage  = "url(images/" + dungeons[k].image + ')';
+    span.style.backgroundImage  = "url(" + build_img_url(dungeons[k].image) + ')';
     span.setAttribute("onmouseover",  "highlightDungeon("    + k + ")");
     span.setAttribute("onmouseout",   "unhighlightDungeon("  + k + ")");
     $("mapDiv").appendChild(span);
