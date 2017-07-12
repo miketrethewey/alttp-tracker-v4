@@ -60,7 +60,7 @@ td {
   margin-top:          -12px;
   width:                24px;
   height:               24px;
-  z-index:               2px;
+  z-index:               2;
 }
 
 .dungeon {

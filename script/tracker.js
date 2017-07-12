@@ -7,8 +7,14 @@ function $(e) {
   return document.getElementById(e);
 }
 
-function mini(img) {
-  return '<img src="images/' + img + '.png" class="mini" />';
+function getQuery(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 // Event of clicking on the item tracker
@@ -347,7 +353,7 @@ function print_tracker() {
           bossTdTableTrTh.id                    = "medallion" + (d - 8);
           bossTdTableTrTh.className             = "corner";
           bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
-          bossTdTableTrTh.setAttribute("onclick","toggleMedallion('" + (d - 8) + "')");
+          bossTdTableTrTh.setAttribute("onclick","toggleMedallion(" + (d - 8) + ")");
         } else {
           bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
         }
@@ -385,15 +391,24 @@ function print_tracker() {
   }
   tracker.appendChild(tr);
   $("tracker").appendChild(tracker);
+}
+
+function init() {
+  isMap = getQuery("map");
+
+  print_tracker();
 
   if(isMap) {
+    var caption       = document.createElement("span");
+    caption.id        = "caption";
+    caption.innerHTML = "&nbsp;";
+    $("map").appendChild(caption);
+
     print_map_chests();
   } else {
     $("map").style.display = "none";
   }
-}
 
-function init() {
   $("sword").style.backgroundImage  = "url(images/sword1.png)";
   $("shield").style.backgroundImage = "url(images/shield.png)";
 }

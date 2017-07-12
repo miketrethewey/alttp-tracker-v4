@@ -1,3 +1,7 @@
+function mini(img) {
+  return '<img src="images/' + img + '.png" class="mini" />';
+}
+
 function steve() {
   if(!items.moonpearl) {
     return false;
