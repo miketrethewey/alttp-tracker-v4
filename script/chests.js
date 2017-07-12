@@ -1,22 +1,3 @@
-var GREEN_PENDANT = 4;
-var OTHER_PENDANT = 3;
-var OTHER_CRYSTAL = 1;
-var OJ_CRYSTAL    = 2;
-
-function mini(img) {
-  return '<img src="images/' + img + '.png" class="mini" />';
-}
-
-function steve() {
-  if(!items.moonpearl) {
-    return false;
-  }
-  if(items.glove == 2 || (items.glove && items.hammer)) {
-    return true;
-  }
-  return items.agahnim && items.hookshot && (items.hammer || items.glove || items.flippers);
-}
-
 // define dungeon chests
 var dungeons = new Array;
 

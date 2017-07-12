@@ -1,25 +1,3 @@
-var rowLength   = 7;
-var prizes      = [];
-var medallions  = [0, 0];
-var isMap       = false;
-var isOpen      = false;
-
-function $(e) {
-  return document.getElementById(e);
-}
-
-Element.prototype.prependChild = function(child) { this.insertBefore(child, this.firstChild); };
-
-function getQuery(name, url) {
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-  results = regex.exec(url);
-  if (!results) return '';
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
 // Event of clicking on the item tracker
 function toggle(label, mode = "advance") {
   if(label.substring(0,5) == "chest") {
@@ -457,6 +435,7 @@ function print_tracker() {
 function init() {
   isMap   = getQuery("map")   != "";
   isOpen  = getQuery("open")  != "";
+  theme   = getQuery("theme") != "" ? getQuery("theme") : "default";
 
   print_tracker();
 
