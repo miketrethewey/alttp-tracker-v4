@@ -396,7 +396,6 @@ function print_tracker() {
 function init() {
   isMap = getQuery("map");
 
-<<<<<<< HEAD
   print_tracker();
 
   if(isMap) {
@@ -405,9 +404,7 @@ function init() {
     caption.innerHTML = "&nbsp;";
     $("map").appendChild(caption);
 
-=======
   if(isMap) {
->>>>>>> origin/master
     print_map_chests();
   } else {
     $("map").style.display = "none";
