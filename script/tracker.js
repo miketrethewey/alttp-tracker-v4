@@ -403,8 +403,6 @@ function init() {
     caption.id        = "caption";
     caption.innerHTML = "&nbsp;";
     $("map").appendChild(caption);
-
-  if(isMap) {
     print_map_chests();
   } else {
     $("map").style.display = "none";
@@ -413,3 +411,4 @@ function init() {
   $("sword").style.backgroundImage  = "url(images/sword1.png)";
   $("shield").style.backgroundImage = "url(images/shield.png)";
 }
+
