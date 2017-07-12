@@ -121,3 +121,22 @@ td {
 .opened {
   background-color: rgb(127,127,127);
 }
+
+.dungeonPrize, .dungeonMedallion {
+  background-color:           rgb(0,0,0);
+  background-size:            32px 32px;
+  border-top-left-radius:     50%;
+  border-bottom-left-radius:  50%;
+  border-bottom-right-radius: 50%;
+  opacity:                    0.7;
+}
+.dungeonPrize {
+  border-top-left-radius:     50%;
+  border-top-right-radius:    50%;
+  border-bottom-left-radius:  50%;
+}
+.dungeonPrize4, .pendant0 { /* Green Pendant */
+  transform:                  scaleX(-1);
+  border-bottom-left-radius:  0%;
+  border-bottom-right-radius: 0%;
+}

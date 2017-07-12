@@ -7,13 +7,14 @@ var prizes        = [];
 var medallions    = [0, 0];
 var isMap         = false;
 var isOpen        = false;
-var theme         = "default";
+var selectedTheme = "default";
 
 function $(e) {
   return document.getElementById(e);
 }
 
 Element.prototype.prependChild = function(child) { this.insertBefore(child, this.firstChild); };
+String.prototype.ucfirst = function () { return this.substr(0,1).toUpperCase() + this.slice(1); }
 
 function getQuery(name, url) {
   if (!url) url = window.location.href;
@@ -25,16 +26,61 @@ function getQuery(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function build_img_url(fname,useTheme = theme) {
+function build_img_url(fname,useTheme = selectedTheme) {
   var defaultRoot = "images/";
+  var themeRoot   = defaultRoot;
 
-  switch(theme) {
+  var checkForSupport         = ["bomb","agahnim","boss","dungeon","medallion0"];
+  var supportedByTheme        = [];
+  supportedByTheme["vanilla"] = ["dungeon","medallion0"];
+
+  var hasSupport = true;
+  for(var check in checkForSupport) {
+    check = checkForSupport[check];
+    if(fname.indexOf(check) > -1) {
+      hasSupport = false;
+      for(var supported in supportedByTheme[useTheme]) {
+        supported = supportedByTheme[useTheme][supported];
+        if(supported.indexOf(check) > -1) {
+          hasSupport = true;
+        }
+      }
+    }
+  }
+  if(fname == "bombos") {
+    hasSupport = true;
+  }
+
+  var globalReplace = {
+    medallion1: "bombos",
+    medallion2: "ether",
+    medallion3: "quake",
+    dungeon4:   "pendant0"
+  };
+
+  for(var replace in globalReplace) {
+    fname = fname.replace(replace,globalReplace[replace]);
+  }
+
+  var noSupport = ["sword","shield","dungeon0"];
+  if(noSupport.indexOf(fname) > -1) {
+    hasSupport = false;
+  }
+
+  if(! hasSupport) {
+    useTheme = "default";
+  }
+
+  switch(useTheme) {
+    case "vanilla":
+      themeRoot = "BONUS/DLC%20Icons/Vanilla/";
+      break;
     default:
-      useTheme = defaultRoot;
+      themeRoot = defaultRoot;
       break;
   }
 
-  return useTheme + fname + ".png";
+  return themeRoot + fname + ".png";
 }
 
 function mini(img) {
@@ -50,3 +96,5 @@ function steve() {
   }
   return items.agahnim && items.hookshot && (items.hammer || items.glove || items.flippers);
 }
+
+selectedTheme = getQuery("theme") != "" ? getQuery("theme") : "default";

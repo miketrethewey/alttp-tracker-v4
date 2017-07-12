@@ -13,7 +13,7 @@ function toggle(label, mode = "advance") {
       items[label] = 0;
     }
 
-    $(label).style.backgroundImage = ("url(images/chest" + items[label] + ".png)");
+    $(label).style.backgroundImage = ("url(" + build_img_url("chest" + items[label]) + ')');
     x = label.substring(5);
     if(isMap) {
       if(items[label] == 0) {
@@ -43,12 +43,12 @@ function toggle(label, mode = "advance") {
     var bossSquare = (label.indexOf("boss") > -1 && label.length == 5);
 
     if(items[label] > itemsMin[label]) {
-      $(label).style.backgroundImage = ("url(images/" + label + items[label] + ".png)");
+      $(label).style.backgroundImage = ("url(" + build_img_url(label + items[label]) + ')');
       if(! bossSquare) {
         $(label).className = ("true");
       }
     } else {
-      $(label).style.backgroundImage = ("url(images/" + label + ".png)");
+      $(label).style.backgroundImage = ("url(" + build_img_url(label) + ')');
       if(! bossSquare) {
         $(label).className = ("false");
       }
@@ -86,7 +86,7 @@ function toggle(label, mode = "advance") {
 
 // BUNNY TIME!!!
 function togglePearl() {
-  var link = "url(images/tunic";
+  var link = "tunic";
   if(items.tunic > 1) {
     link += items.tunic;
   }
@@ -94,9 +94,9 @@ function togglePearl() {
     link += "b";
   }
 
-  link += ".png)";
-
-  $("tunic").style.backgroundImage = link;
+  $("tunic").style.backgroundImage = "url(" + build_img_url(link) + ')';
+  $("tunic").classList.remove("false");
+  $("tunic").classList.add("true");
 }
 
 // Event of clicking a chest on the map
@@ -143,6 +143,7 @@ function unhighlightDungeon(x) {
 
 // event of clicking on a boss's pendant/crystal subsquare
 function toggleDungeon(n, mode = "advance") {
+  var lastPrize = prizes[n];
   if(mode == "advance") {
     prizes[n]++;
   } else {
@@ -158,7 +159,9 @@ function toggleDungeon(n, mode = "advance") {
     prizes[n] = min;
   }
 
-  $("dungeonPrize" + n).style.backgroundImage = "url(images/dungeon" + prizes[n] + ".png)";
+  $("dungeonPrize" + n).style.backgroundImage = "url(" + build_img_url("dungeon" + prizes[n]) + ')';
+  $("dungeonPrize" + n).classList.remove("dungeonPrize" + lastPrize)
+  $("dungeonPrize" + n).classList.add("dungeonPrize" + prizes[n]);
 
   if(isMap) {
     // Update Sahasralah, Fat Fairy, and Master Sword Pedestal
@@ -173,6 +176,7 @@ function toggleDungeon(n, mode = "advance") {
 
 // event of clicking on Mire/TRock's medallion subsquare
 function toggleMedallion(n, mode = "advance") {
+  var lastMedallion = medallions[n];
   if(mode == "advance") {
     medallions[n]++;
   } else {
@@ -188,7 +192,9 @@ function toggleMedallion(n, mode = "advance") {
     medallions[n] = min;
   }
 
-  $("medallion" + n).style.backgroundImage = "url(images/medallion" + medallions[n] + ".png)";
+  $("medallion" + n).style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
+  $("medallion" + n).classList.remove("dungeonMedallion" + lastMedallion)
+  $("medallion" + n).classList.add("dungeonMedallion" + medallions[n]);
 
   if(isMap) {
     // Update availability of dungeon boss AND chests
@@ -218,7 +224,7 @@ function build_lonk() {
   // td
   var lonkTd = document.createElement("td");
   lonkTd.id = "tunic";
-  lonkTd.style.backgroundImage = "url(images/tunic.png)";
+  lonkTd.style.backgroundImage = "url(" + build_img_url("tunic") + ')';
   lonkTd.setAttribute("colspan",2);
   lonkTd.setAttribute("rowspan",2);
 
@@ -312,7 +318,7 @@ function build_lonk() {
   pearlTableTrTh = document.createElement("th");
   pearlTableTrTh.id = "moonpearl";
   pearlTableTrTh.className = "false";
-  pearlTableTrTh.style.backgroundImage = "url(images/moonpearl.png)";
+  pearlTableTrTh.style.backgroundImage = "url(" + build_img_url("moonpearl") + ')';
   pearlTableTrTh.style.width = "48px";
   pearlTableTrTh.style.height = "48px";
   pearlTableTrTh.setAttribute("onclick","toggle('moonpearl')");
@@ -367,7 +373,7 @@ function print_tracker() {
         bossTd.style.backgroundImage  = "url(images/" + x + ".png)";
 
         var bossTdTable       = document.createElement("table");
-        bossTdTable.className = "lonk";
+        bossTdTable.className = "lonk trackerSquare bossSquare";
         bossTdTable.setAttribute("cellpadding",0);
         bossTdTable.setAttribute("cellspacing",0);
 
@@ -375,19 +381,17 @@ function print_tracker() {
         var bossTdTableTrTh = document.createElement("th");
         bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
         bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
-        bossTdTableTrTh.setAttribute("colspan",2);
-
         bossTdTableTr.appendChild(bossTdTableTrTh);
+
         bossTdTable.appendChild(bossTdTableTr);
 
-        bossTdTableTr = document.createElement("tr");
-        var bossTdTableTrTh = document.createElement("th");
+        bossTdTableTrTh = document.createElement("th");
 
         // Does dungeon have a medallion?
         if(d >= 8) {
           bossTdTableTrTh.id                    = "medallion" + (d - 8);
-          bossTdTableTrTh.className             = "corner";
-          bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
+          bossTdTableTrTh.className             = "corner dungeonMedallion dungeonMedallion0";
+          bossTdTableTrTh.style.backgroundImage = "url(" + build_img_url("medallion0") + ')';
           bossTdTableTrTh.setAttribute("onclick","toggleMedallion(" + (d - 8) + ")");
           bossTdTableTrTh.setAttribute("oncontextmenu","toggleMedallion(" + (d - 8) + ",'retreat');return false;");
         } else {
@@ -395,11 +399,19 @@ function print_tracker() {
           bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
         }
         bossTdTableTr.appendChild(bossTdTableTrTh);
+        bossTdTable.appendChild(bossTdTableTr);
+
+        bossTdTableTr   = document.createElement("tr");
+
+        var bossTdTableTrTh = document.createElement("th");
+        bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
+        bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
+        bossTdTableTr.appendChild(bossTdTableTrTh);
 
         bossTdTableTrTh                       = document.createElement("th");
         bossTdTableTrTh.id                    = "dungeonPrize" + d;
-        bossTdTableTrTh.className             = "corner";
-        bossTdTableTrTh.style.backgroundImage = "url(images/dungeon0.png)";
+        bossTdTableTrTh.className             = "corner dungeonPrize dungeonPrize0";
+        bossTdTableTrTh.style.backgroundImage = "url(" + build_img_url("dungeon0") + ')';
         bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
         bossTdTableTrTh.setAttribute("oncontextmenu","toggleDungeon(" + d + ",'retreat');return false;");
         bossTdTableTr.appendChild(bossTdTableTrTh);
@@ -412,12 +424,13 @@ function print_tracker() {
       } else {
         var square = document.createElement("td");
         if(x.substring(0,5) == "chest") {
-          square.style.backgroundImage = "url(images/chest" + items[x] + ".png)";
+          square.style.backgroundImage = "url(" + build_img_url("chest" + items[x]) + ')';
         } else {
-          square.style.backgroundImage = "url(images/" + x + ".png)";
+          square.style.backgroundImage = "url(" + build_img_url(x) + ')';
         }
         square.id = x;
         square.className = !!items[x];
+        square.classList.add("trackerSquare");
         square.setAttribute("onclick","toggle('" + x + "')");
         square.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
         tr.appendChild(square);
@@ -435,7 +448,6 @@ function print_tracker() {
 function init() {
   isMap   = getQuery("map")   != "";
   isOpen  = getQuery("open")  != "";
-  theme   = getQuery("theme") != "" ? getQuery("theme") : "default";
 
   print_tracker();
 
@@ -449,17 +461,28 @@ function init() {
     $("mapDiv").style.display = "none";
   }
 
-  var form = document.createElement("form");
-  form.id = "form";
+  var form  = document.createElement("form");
+  form.id   = "form";
   $("disclaimer").prependChild(form);
+
+  var select  = document.createElement("select");
+  select.id   = "theme";
+  select.name = "theme";
+  var themes  = ["default","vanilla"];
+  for(var t in themes) {
+    t                 = themes[t];
+    var option        = document.createElement("option");
+    option.value      = t;
+    option.innerHTML  = t.ucfirst();
+    select.appendChild(option);
+  }
+  select.setAttribute("onchange",'$("form").submit()');
+  form.appendChild(select);
+  form.innerHTML += "<br />";
 
   var span  = document.createElement("span");
   var label = document.createElement("label");
   var input = document.createElement("input");
-
-  label.innerHTML = "Map?";
-  label.setAttribute("for","map");
-  span.appendChild(label);
 
   input.id      = "map";
   input.name    = "map";
@@ -467,22 +490,32 @@ function init() {
   input.checked = isMap;
   input.setAttribute("onchange",'$("form").submit()');
   span.appendChild(input);
+
+  label.innerHTML = "Map?";
+  label.setAttribute("for","map");
+  span.appendChild(label);
+
   form.appendChild(span);
+  form.innerHTML += "<br />";
 
   span  = document.createElement("span");
   label = document.createElement("label");
   input = document.createElement("input");
-  label.innerHTML = "Open Mode?";
-  label.setAttribute("for","open");
-  span.appendChild(label);
-
   input.id      = "open";
   input.name    = "open";
   input.type    = "checkbox";
   input.checked = isOpen;
   input.setAttribute("onchange",'$("map").checked="on";$("form").submit()');
   span.appendChild(input);
+
+  label.innerHTML = "Open Mode?";
+  label.setAttribute("for","open");
+  span.appendChild(label);
+
   form.appendChild(span);
+  form.innerHTML += "<br />";
+
+  $("theme").selectedIndex = themes.indexOf(selectedTheme.toLowerCase());
 
   if(isOpen) {
     var openChests = [56,57,58];
@@ -490,11 +523,11 @@ function init() {
       chest = openChests[chest];
       toggleChest(chest);
     }
-    $("sword").style.backgroundImage  = "url(images/sword.png)";
+    $("sword").style.backgroundImage  = "url(" + build_img_url("sword") + ')';
   } else {
-    $("sword").style.backgroundImage  = "url(images/sword1.png)";
+    $("sword").style.backgroundImage  = "url(" + build_img_url("sword1") + ')';
   }
 
-  $("shield").style.backgroundImage = "url(images/shield.png)";
+  $("shield").style.backgroundImage = "url(" + build_img_url("shield") + ')';
 }
 
