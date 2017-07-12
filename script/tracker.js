@@ -511,9 +511,11 @@ function init() {
       chest = openChests[chest];
       toggleChest(chest);
     }
+    $("sword").style.backgroundImage  = "url(images/sword.png)";
+  } else {
+    $("sword").style.backgroundImage  = "url(images/sword1.png)";
   }
 
-  $("sword").style.backgroundImage  = "url(images/sword1.png)";
   $("shield").style.backgroundImage = "url(images/shield.png)";
 }
 

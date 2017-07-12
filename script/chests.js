@@ -1,3 +1,8 @@
+var GREEN_PENDANT = 4;
+var OTHER_PENDANT = 3;
+var OTHER_CRYSTAL = 1;
+var OJ_CRYSTAL    = 2;
+
 function mini(img) {
   return '<img src="images/' + img + '.png" class="mini" />';
 }
@@ -683,7 +688,7 @@ chests[25] = {
     isOpened: false,
     isAvailable: function() {
       for(var k = 0; k < 10; k++) {
-        if(prizes[k] == 1 && items["boss" + k] == 2) {
+        if(prizes[k] == GREEN_PENDANT && items["boss" + k] == 2) {
           return "available";
         }
       }
@@ -1156,18 +1161,18 @@ chests[61] = {
       //crystal check
       var crystalCount = 0;
       for(var k = 0; k < 10; k++) {
-        if(prizes[k] == 4 && items["boss" + k] == 2) {
+        if(prizes[k] == OJ_CRYSTAL && items["boss" + k] == 2) {
           crystalCount++;
         }
-        if(!items.moonpearl || crystalCount < 2) {
-          return "unavailable";
-        }
-        if(items.hammer && (items.agahnim || items.glove)) {
-          return "available";
-        }
-        if(items.agahnim && items.mirror && steve()) {
-          return "available";
-        }
+      }
+      if(!items.moonpearl || crystalCount < 2) {
+        return "unavailable";
+      }
+      if(items.hammer && (items.agahnim || items.glove)) {
+        return "available";
+      }
+      if(items.agahnim && items.mirror && steve()) {
+        return "available";
       }
       return "unavailable";
     }
@@ -1182,7 +1187,7 @@ chests[62] = {
     isAvailable: function() {
       var pendantCount = 0;
       for(var k = 0; k < 10; k++) {
-        if((prizes[k] == 1 || prizes[k] == 2) && items["boss" + k] == 2) {
+        if((prizes[k] == GREEN_PENDANT || prizes[k] == OTHER_PENDANT) && items["boss" + k] == 2) {
           if(++pendantCount == 3) {
             return "available";
           }
