@@ -7,6 +7,8 @@ function $(e) {
   return document.getElementById(e);
 }
 
+Element.prototype.prependChild = function(child) { this.insertBefore(child, this.firstChild); };
+
 function getQuery(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
@@ -460,11 +462,31 @@ function init() {
     var caption       = document.createElement("span");
     caption.id        = "caption";
     caption.innerHTML = "&nbsp;";
-    $("map").appendChild(caption);
+    $("mapDiv").appendChild(caption);
     print_map_chests();
   } else {
-    $("map").style.display = "none";
+    $("mapDiv").style.display = "none";
   }
+
+  var form = document.createElement("form");
+  form.id = "form";
+  $("disclaimer").prependChild(form);
+
+  var span = document.createElement("span");
+  var input = document.createElement("input");
+  var label = document.createElement("label");
+
+  label.innerHTML = "Map?";
+  label.setAttribute("for","map");
+  span.appendChild(label);
+
+  input.id        = "map";
+  input.name      = "map";
+  input.type      = "checkbox";
+  input.setAttribute("checked",isMap);
+  input.setAttribute("onchange",'$("form").submit()');
+  span.appendChild(input);
+  form.appendChild(span);
 
   $("sword").style.backgroundImage  = "url(images/sword1.png)";
   $("shield").style.backgroundImage = "url(images/shield.png)";

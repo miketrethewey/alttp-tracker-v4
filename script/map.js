@@ -8,7 +8,7 @@ function print_map_chests() {
     span.setAttribute("oncontextmenu",  "toggleChest('" + k + "')");
     span.setAttribute("onmouseover",    "highlight("    + k + ")");
     span.setAttribute("onmouseout",     "unhighlight("  + k + ")");
-    $("map").appendChild(span);
+    $("mapDiv").appendChild(span);
 
     $(k).style.left = chests[k].x;
     $(k).style.top  = chests[k].y;
@@ -26,7 +26,7 @@ function print_map_chests() {
     span.style.backgroundImage  = "url(images/" + dungeons[k].image + ')';
     span.setAttribute("onmouseover",  "highlightDungeon("    + k + ")");
     span.setAttribute("onmouseout",   "unhighlightDungeon("  + k + ")");
-    $("map").appendChild(span);
+    $("mapDiv").appendChild(span);
 
     $("bossMap" + k).style.left = dungeons[k].x;
     $("bossMap" + k).style.top  = dungeons[k].y;
@@ -37,7 +37,7 @@ function print_map_chests() {
     span.style.backgroundImage  = "url(images/poi.png)";
     span.setAttribute("onmouseover",  "highlightDungeon("    + k + ")");
     span.setAttribute("onmouseout",   "unhighlightDungeon("  + k + ")");
-    $("map").appendChild(span);
+    $("mapDiv").appendChild(span);
 
     $("dungeon" + k).style.left = dungeons[k].x;
     $("dungeon" + k).style.top  = dungeons[k].y;
