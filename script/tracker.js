@@ -2,6 +2,7 @@ var rowLength   = 7;
 var prizes      = [];
 var medallions  = [0, 0];
 var isMap       = false;
+var isOpen      = false;
 
 function $(e) {
   return document.getElementById(e);
@@ -14,7 +15,7 @@ function getQuery(name, url) {
   name = name.replace(/[\[\]]/g, "\\$&");
   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
   results = regex.exec(url);
-  if (!results) return null;
+  if (!results) return '';
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
@@ -454,7 +455,8 @@ function print_tracker() {
 }
 
 function init() {
-  isMap = getQuery("map");
+  isMap   = getQuery("map")   != "";
+  isOpen  = getQuery("open")  != "";
 
   print_tracker();
 
@@ -472,21 +474,44 @@ function init() {
   form.id = "form";
   $("disclaimer").prependChild(form);
 
-  var span = document.createElement("span");
-  var input = document.createElement("input");
+  var span  = document.createElement("span");
   var label = document.createElement("label");
+  var input = document.createElement("input");
 
   label.innerHTML = "Map?";
   label.setAttribute("for","map");
   span.appendChild(label);
 
-  input.id        = "map";
-  input.name      = "map";
-  input.type      = "checkbox";
-  input.setAttribute("checked",isMap);
+  input.id      = "map";
+  input.name    = "map";
+  input.type    = "checkbox";
+  input.checked = isMap;
   input.setAttribute("onchange",'$("form").submit()');
   span.appendChild(input);
   form.appendChild(span);
+
+  span  = document.createElement("span");
+  label = document.createElement("label");
+  input = document.createElement("input");
+  label.innerHTML = "Open Mode?";
+  label.setAttribute("for","open");
+  span.appendChild(label);
+
+  input.id      = "open";
+  input.name    = "open";
+  input.type    = "checkbox";
+  input.checked = isOpen;
+  input.setAttribute("onchange",'$("map").checked="on";$("form").submit()');
+  span.appendChild(input);
+  form.appendChild(span);
+
+  if(isOpen) {
+    var openChests = [56,57,58];
+    for(var chest in openChests) {
+      chest = openChests[chest];
+      toggleChest(chest);
+    }
+  }
 
   $("sword").style.backgroundImage  = "url(images/sword1.png)";
   $("shield").style.backgroundImage = "url(images/shield.png)";
