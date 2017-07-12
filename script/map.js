@@ -4,9 +4,10 @@ function print_map_chests() {
     var span                    = document.createElement("span");
     span.id                     = k;
     span.style.backgroundImage  = "url(images/poi.png)";
-    span.setAttribute("onclick",      "toggleChest('" + k + "')");
-    span.setAttribute("onmouseover",  "highlight("    + k + ")");
-    span.setAttribute("onmouseout",   "unhighlight("  + k + ")");
+    span.setAttribute("onclick",        "toggleChest('" + k + "')");
+    span.setAttribute("oncontextmenu",  "toggleChest('" + k + "')");
+    span.setAttribute("onmouseover",    "highlight("    + k + ")");
+    span.setAttribute("onmouseout",     "unhighlight("  + k + ")");
     $("map").appendChild(span);
 
     $(k).style.left = chests[k].x;

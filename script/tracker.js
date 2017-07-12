@@ -18,11 +18,20 @@ function getQuery(name, url) {
 }
 
 // Event of clicking on the item tracker
-function toggle(label) {
+function toggle(label, mode = "advance") {
   if(label.substring(0,5) == "chest") {
-    if(--items[label] < 0) {
-      items[label] = itemsMax[label];
+    if(mode == "advance") {
+      items[label]--;
+    } else {
+      items[label]++;
     }
+
+    if(items[label] < 0) {
+      items[label] = itemsMax[label];
+    } else if(items[label] > itemsMax[label]) {
+      items[label] = 0;
+    }
+
     $(label).style.backgroundImage = ("url(images/chest" + items[label] + ".png)");
     x = label.substring(5);
     if(isMap) {
@@ -38,15 +47,30 @@ function toggle(label) {
   if((typeof items[label]) == "boolean") {
     $(label).className = (items[label] = !items[label]);
   } else {
-    if(++items[label] > itemsMax[label]) {
+    if(mode == "advance") {
+      items[label]++;
+    } else {
+      items[label]--;
+    }
+
+    if(items[label] > itemsMax[label]) {
       items[label] = itemsMin[label];
-      $(label).style.backgroundImage = ("url(images/" + label + ".png)");
-      if(!items[label]) {
-        $(label).className = ("false");
+    } else if(items[label] < itemsMin[label]) {
+      items[label] = itemsMax[label];
+    }
+
+    var bossSquare = (label.indexOf("boss") > -1 && label.length == 5);
+
+    if(items[label] > itemsMin[label]) {
+      $(label).style.backgroundImage = ("url(images/" + label + items[label] + ".png)");
+      if(! bossSquare) {
+        $(label).className = ("true");
       }
     } else {
-      $(label).style.backgroundImage = ("url(images/" + label + items[label] + ".png)");
-      $(label).className = ("true");
+      $(label).style.backgroundImage = ("url(images/" + label + ".png)");
+      if(! bossSquare) {
+        $(label).className = ("false");
+      }
     }
   }
 
@@ -137,11 +161,22 @@ function unhighlightDungeon(x) {
 }
 
 // event of clicking on a boss's pendant/crystal subsquare
-function toggleDungeon(n) {
-  prizes[n]++;
-  if(prizes[n] == 5) {
-    prizes[n] = 0;
+function toggleDungeon(n, mode = "advance") {
+  if(mode == "advance") {
+    prizes[n]++;
+  } else {
+    prizes[n]--;
   }
+
+  var min = 0;
+  var max = 4;
+
+  if(prizes[n] < min) {
+    prizes[n] = max;
+  } else if(prizes[n] > max) {
+    prizes[n] = min;
+  }
+
   $("dungeonPrize" + n).style.backgroundImage = "url(images/dungeon" + prizes[n] + ".png)";
 
   if(isMap) {
@@ -156,11 +191,22 @@ function toggleDungeon(n) {
 }
 
 // event of clicking on Mire/TRock's medallion subsquare
-function toggleMedallion(n) {
-  medallions[n]++;
-  if(medallions[n] == 4) {
-    medallions[n] = 0;
+function toggleMedallion(n, mode = "advance") {
+  if(mode == "advance") {
+    medallions[n]++;
+  } else {
+    medallions[n]--;
   }
+
+  var min = 0;
+  var max = 3;
+
+  if(medallions[n] < min) {
+    medallions[n] = max;
+  } else if(medallions[n] > max) {
+    medallions[n] = min;
+  }
+
   $("medallion" + n).style.backgroundImage = "url(images/medallion" + medallions[n] + ".png)";
 
   if(isMap) {
@@ -208,6 +254,7 @@ function build_lonk() {
         //  td table tr th
   var lonkTh = document.createElement("th");
   lonkTh.setAttribute("onclick","toggle('tunic')");
+  lonkTh.setAttribute("oncontextmenu","toggle('tunic');return false;");
 
         // Add Tunic
   lonkTr.appendChild(lonkTh);
@@ -216,6 +263,7 @@ function build_lonk() {
   var td = document.createElement("td");
   td.id = "sword";
   td.setAttribute("onclick","toggle('sword')");
+  td.setAttribute("oncontextmenu","toggle('sword');return false;");
 
         // Add Sword
   lonkTr.appendChild(td);
@@ -230,6 +278,7 @@ function build_lonk() {
   td = document.createElement("td");
   td.id = "shield";
   td.setAttribute("onclick","toggle('shield')");
+  td.setAttribute("oncontextmenu","toggle('shield');return false;");
 
         // Add Shield
   lonkTr.appendChild(td);
@@ -251,6 +300,7 @@ function build_lonk() {
   var pearlTableTrTh = document.createElement("th");
   pearlTableTrTh.className = "mini-corner";
   pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+  pearlTableTrTh.setAttribute("oncontextmenu","toggle('tunic','retreat');return false;");
 
             // Add Tunic (1)
   pearlTableTr.appendChild(pearlTableTrTh);
@@ -258,6 +308,7 @@ function build_lonk() {
               // td table tr th table tr th : Build Tunic (2)
   pearlTableTrTh = document.createElement("th");
   pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+  pearlTableTrTh.setAttribute("oncontextmenu","toggle('tunic','retreat');return false;");
 
             // Add Tunic (2)
   pearlTableTr.appendChild(pearlTableTrTh);
@@ -271,6 +322,7 @@ function build_lonk() {
           // td table tr th table tr th : Build Tunic
   pearlTableTrTh = document.createElement("th");
   pearlTableTrTh.setAttribute("onclick","toggle('tunic')");
+  pearlTableTrTh.setAttribute("oncontextmenu","toggle('tunic','retreat');return false;");
 
         // Add Tunic
   pearlTableTr.appendChild(pearlTableTrTh);
@@ -283,6 +335,7 @@ function build_lonk() {
   pearlTableTrTh.style.width = "48px";
   pearlTableTrTh.style.height = "48px";
   pearlTableTrTh.setAttribute("onclick","toggle('moonpearl')");
+  pearlTableTrTh.setAttribute("oncontextmenu","toggle('moonpearl','retreat');return false;");
 
         // Add Pearl
   pearlTableTr.appendChild(pearlTableTrTh);
@@ -340,6 +393,7 @@ function print_tracker() {
         var bossTdTableTr   = document.createElement("tr");
         var bossTdTableTrTh = document.createElement("th");
         bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
+        bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
         bossTdTableTrTh.setAttribute("colspan",2);
 
         bossTdTableTr.appendChild(bossTdTableTrTh);
@@ -354,8 +408,10 @@ function print_tracker() {
           bossTdTableTrTh.className             = "corner";
           bossTdTableTrTh.style.backgroundImage = "url(images/medallion0.png)";
           bossTdTableTrTh.setAttribute("onclick","toggleMedallion(" + (d - 8) + ")");
+          bossTdTableTrTh.setAttribute("oncontextmenu","toggleMedallion(" + (d - 8) + ",'retreat');return false;");
         } else {
           bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
+          bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
         }
         bossTdTableTr.appendChild(bossTdTableTrTh);
 
@@ -364,6 +420,7 @@ function print_tracker() {
         bossTdTableTrTh.className             = "corner";
         bossTdTableTrTh.style.backgroundImage = "url(images/dungeon0.png)";
         bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
+        bossTdTableTrTh.setAttribute("oncontextmenu","toggleDungeon(" + d + ",'retreat');return false;");
         bossTdTableTr.appendChild(bossTdTableTrTh);
 
         bossTdTable.appendChild(bossTdTableTr);
@@ -381,6 +438,7 @@ function print_tracker() {
         square.id = x;
         square.className = !!items[x];
         square.setAttribute("onclick","toggle('" + x + "')");
+        square.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
         tr.appendChild(square);
       }
 
