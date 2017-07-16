@@ -14,9 +14,9 @@ class Square {
     square.id     = this.id;
     square.title  = this.getTitle();
     if(this.backgroundImage != "") {
-    square.style.backgroundImage = "url(" + this.backgroundImage + ')';
-  }
-    square.className  = this.classList.join(' ');
+      square.style.backgroundImage = "url(" + this.backgroundImage + ')';
+    }
+    square.className = this.classList.join(' ');
     square.setAttribute("onclick",        this.onLtClick);
     square.setAttribute("oncontextmenu",  this.onRtClick);
 
