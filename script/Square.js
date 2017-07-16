@@ -8,17 +8,17 @@ class Square {
     this.onRtClick        = this.onLtClick.replace("advance","retreat") + ";return false;";
   }
 
-  build(mode = "single") {
+  build() {
     var square = document.createElement("td");
 
-    square.id								= this.id;
-    square.title							= this.getTitle();
+    square.id     = this.id;
+    square.title  = this.getTitle();
     if(this.backgroundImage != "") {
-	  square.style.backgroundImage = "url(" + this.backgroundImage + ')';
-	}
-    square.className						= this.classList.join(' ');
-    square.setAttribute("onclick",			this.onLtClick);
-    square.setAttribute("oncontextmenu",	this.onRtClick);
+    square.style.backgroundImage = "url(" + this.backgroundImage + ')';
+  }
+    square.className  = this.classList.join(' ');
+    square.setAttribute("onclick",        this.onLtClick);
+    square.setAttribute("oncontextmenu",  this.onRtClick);
 
     return square;
   }
@@ -27,11 +27,11 @@ class Square {
   getTitle() {
     var bosses     = ["Armos Knights","Lanmolas","Moldorm","Helmasaur King","Arrghus","Mothula","Blind","Kholdstare","Vitreous","Trinexx"];
     var dungeons   = ["Eastern Palace","Desert Palace","Tower of Hera","Palace of Darkness","Swamp Palace","Skull Woods","Thieves' Town","Ice Palace","Misery Mire","Turtle Rock"];
-	if(this.title.toLowerCase().indexOf("boss") > -1) {
-	  this.title = dungeons[this.dungeonID];
-	} else if(this.title.toLowerCase().indexOf("chest") > -1) {
-	  this.title = dungeons[this.dungeonID];
-	} else {
+    if(this.title.toLowerCase().indexOf("boss") > -1) {
+      this.title = dungeons[this.dungeonID];
+    } else if(this.title.toLowerCase().indexOf("chest") > -1) {
+      this.title = dungeons[this.dungeonID];
+    } else {
       switch(this.title.toLowerCase()) {
         case "byrna":
         case "somaria":
@@ -51,7 +51,7 @@ class Square {
           this.title = "Moon Pearl";
           break;
       }
-	}
-	return this.title;
+    }
+    return this.title;
   }
 }
