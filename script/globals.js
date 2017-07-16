@@ -61,7 +61,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
     medallion2: "ether",
     medallion3: "quake",
     dungeon4:   "pendant0",
-    tunic1:		"tunic",
+    tunic1:   "tunic",
     ".png":     ""
   };
 
@@ -100,7 +100,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
 }
 
 function mini(img) {
-  return '<img src="' + build_img_url(img) + '" class="mini" />';
+  return '<img src="' + build_img_url(img) + '" class="mini ' + img + '" />';
 }
 
 function steve() {
