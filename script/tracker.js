@@ -1,5 +1,8 @@
 // Event of clicking on the item tracker
 function toggle(label, mode = "advance") {
+  var curr = items[label];
+  var eles = document.getElementsByClassName(label);
+
   if(label.substring(0,5) == "chest") {
     if(mode == "advance") {
       items[label]--;
@@ -14,6 +17,8 @@ function toggle(label, mode = "advance") {
     }
 
     $(label).style.backgroundImage = ("url(" + build_img_url("chest" + items[label]) + ')');
+    $(label).classList.remove(label + '-' + curr);
+    $(label).classList.add(label + '-' + items[label]);
     x = label.substring(5);
     if(isMap) {
       if(items[label] == 0) {
@@ -26,7 +31,15 @@ function toggle(label, mode = "advance") {
   }
 
   if((typeof items[label]) == "boolean") {
-    $(label).className = (items[label] = !items[label]);
+    $(label).classList.remove(curr);
+    $(label).classList.add((items[label] = !items[label]));
+    for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className.length > 0 && ele.className.indexOf(curr) > -1) {
+        ele.classList.remove(curr);
+        ele.classList.add(items[label]);
+      }
+    }
   } else {
     if(mode == "advance") {
       items[label]++;
@@ -51,6 +64,32 @@ function toggle(label, mode = "advance") {
       $(label).style.backgroundImage = ("url(" + build_img_url(label) + ')');
       if(! bossSquare) {
         $(label).className = ("false");
+      }
+    }
+    $(label).classList.remove(label + curr);
+    $(label).classList.add(label + items[label]);
+
+    var miniTheme = selectedTheme;
+    for(var ele in eles) {
+      ele = eles[ele];
+      if(ele.className && ele.className.length > 0 && ele.className.indexOf(label + '-' + curr) > -1) {
+        if(items[label] > 0) {
+          if(label.indexOf("tunic") > -1) {
+            miniTheme = "vanilla";
+          }
+          ele.style.backgroundImage = "url(" + build_img_url(label + items[label], miniTheme) + ')';
+        } else {
+          ele.style.backgroundImage = "url(" + build_img_url(label) + ')';
+        }
+        ele.classList.remove(label + '-' + curr);
+        ele.classList.add(label + '-' + items[label]);
+        if(items[label] == 0) {
+          ele.classList.remove("true");
+          ele.classList.add("false");
+        } else {
+          ele.classList.remove("false");
+          ele.classList.add("true");
+        }
       }
     }
   }
@@ -362,7 +401,17 @@ function print_tracker() {
         s = new ChestSquare(squareID);
       } else if(squareID.indexOf("boss") > -1) {
         s = new BossSquare(squareID);
-      } else  {
+      } else if(squareID.indexOf("duo") > -1 || squareID.indexOf("tri") > -1 || squareID.indexOf("quad") > -1) {
+        var multiItems  = squareID.split('-');
+        id              = multiItems.shift();
+        if(squareID.indexOf("duo") > -1) {
+          s = new DuoSquare(id,multiItems);
+        } else if(squareID.indexOf("tri") > -1) {
+          s = new TriSquare(id,multiItems);
+        } else {
+          s = new QuadSquare(id,multiItems);
+        }
+      } else {
         s = new Square(squareID);
       }
 
@@ -370,14 +419,14 @@ function print_tracker() {
 
       tr.appendChild(square);
 
-      var lonkRow	= ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) < 2);
-      var row		= ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) > 2);
+      var lonkRow = ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) < 2);
+      var row     = ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) > 2);
 
       if((lonkRow && (parseInt(cellID) + 1) % 5 == 0) || (row && (parseInt(cellID) + 1 + 4) % 7 == 0)) {
         tracker.appendChild(tr);
         tr = document.createElement("tr");
       }
-	  cellID++;
+      cellID++;
     }
     tracker.appendChild(tr);
     $("tracker").appendChild(tracker);
@@ -463,6 +512,14 @@ function init() {
   } else {
     $("sword").style.backgroundImage  = "url(" + build_img_url("sword1") + ')';
   }
+
+  var ids = ["tunic","sword","shield"];
+  for(var id in ids) {
+    id = ids[id];
+    toggle(id);
+    toggle(id,"retreat");
+  }
+  $("tunic").style.backgroundImage = "url(" + build_img_url("tunic") + ')';
 
   $("shield").style.backgroundImage = "url(" + build_img_url("shield") + ')';
 
