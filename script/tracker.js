@@ -241,7 +241,7 @@ function build_lonk() {
         //  td table tr th
   var lonkTh = document.createElement("th");
   lonkTh.setAttribute("onclick","toggle('tunic')");
-  lonkTh.setAttribute("oncontextmenu","toggle('tunic');return false;");
+  lonkTh.setAttribute("oncontextmenu","toggle('tunic','retreat');return false;");
 
         // Add Tunic
   lonkTr.appendChild(lonkTh);
@@ -250,7 +250,7 @@ function build_lonk() {
   var td = document.createElement("td");
   td.id = "sword";
   td.setAttribute("onclick","toggle('sword')");
-  td.setAttribute("oncontextmenu","toggle('sword');return false;");
+  td.setAttribute("oncontextmenu","toggle('sword','retreat');return false;");
 
         // Add Sword
   lonkTr.appendChild(td);
@@ -265,7 +265,7 @@ function build_lonk() {
   td = document.createElement("td");
   td.id = "shield";
   td.setAttribute("onclick","toggle('shield')");
-  td.setAttribute("oncontextmenu","toggle('shield');return false;");
+  td.setAttribute("oncontextmenu","toggle('shield','retreat');return false;");
 
         // Add Shield
   lonkTr.appendChild(td);
@@ -351,98 +351,37 @@ function print_tracker() {
   tr.appendChild(build_lonk());
 
   var itemList  = Object.keys(items);
-  var k     = 4;
-  while(k < itemList.length) {
-    if(k != 4) {
-      tracker.appendChild(tr);
-      tr = document.createElement("tr");
+
+  var cellID = 0;
+  for(var squareID in itemList) {
+    squareID  = itemList[squareID];
+    if(squareID != "tunic" && squareID != "shield" && squareID != "sword" && squareID != "moonpearl") {
+      var s  = [];
+
+      if(squareID.indexOf("chest") > -1) {
+        s = new ChestSquare(squareID);
+      } else if(squareID.indexOf("boss") > -1) {
+        s = new BossSquare(squareID);
+      } else  {
+        s = new Square(squareID);
+      }
+
+      var square = s.build();
+
+      tr.appendChild(square);
+
+      var lonkRow	= ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) < 2);
+      var row		= ((parseInt(cellID) + 1) > 0) && ((parseInt(cellID) / 5) > 2);
+
+      if((lonkRow && (parseInt(cellID) + 1) % 5 == 0) || (row && (parseInt(cellID) + 1 + 4) % 7 == 0)) {
+        tracker.appendChild(tr);
+        tr = document.createElement("tr");
+      }
+	  cellID++;
     }
-    for(j = 0; j < rowLength; j++) {
-      if(k == 4 || k == 9) {
-        j = 2;
-      }
-      var x = itemList[k];
-
-      // boss tables (pendant/crystal, medallion)
-      if(x.substring(0,4) == "boss") {
-        var d = prizes.length;
-        prizes[d] = 0;
-
-        var bossTd                    = document.createElement("td");
-        bossTd.id                     = x;
-        bossTd.style.backgroundImage  = "url(" + build_img_url(x) + ')';
-
-        var bossTdTable       = document.createElement("table");
-        bossTdTable.className = "lonk trackerSquare bossSquare";
-        bossTdTable.setAttribute("cellpadding",0);
-        bossTdTable.setAttribute("cellspacing",0);
-
-        var bossTdTableTr   = document.createElement("tr");
-        var bossTdTableTrTh = document.createElement("th");
-        bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
-        bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
-        bossTdTableTr.appendChild(bossTdTableTrTh);
-
-        bossTdTable.appendChild(bossTdTableTr);
-
-        bossTdTableTrTh = document.createElement("th");
-
-        // Does dungeon have a medallion?
-        if(d >= 8) {
-          bossTdTableTrTh.id                    = "medallion" + (d - 8);
-          bossTdTableTrTh.className             = "corner dungeonMedallion dungeonMedallion0";
-          bossTdTableTrTh.style.backgroundImage = "url(" + build_img_url("medallion0") + ')';
-          bossTdTableTrTh.setAttribute("onclick","toggleMedallion(" + (d - 8) + ")");
-          bossTdTableTrTh.setAttribute("oncontextmenu","toggleMedallion(" + (d - 8) + ",'retreat');return false;");
-        } else {
-          bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
-          bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
-        }
-        bossTdTableTr.appendChild(bossTdTableTrTh);
-        bossTdTable.appendChild(bossTdTableTr);
-
-        bossTdTableTr   = document.createElement("tr");
-
-        var bossTdTableTrTh = document.createElement("th");
-        bossTdTableTrTh.setAttribute("onclick","toggle('" + x + "')");
-        bossTdTableTrTh.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
-        bossTdTableTr.appendChild(bossTdTableTrTh);
-
-        bossTdTableTrTh                       = document.createElement("th");
-        bossTdTableTrTh.id                    = "dungeonPrize" + d;
-        bossTdTableTrTh.className             = "corner dungeonPrize dungeonPrize0";
-        bossTdTableTrTh.style.backgroundImage = "url(" + build_img_url("dungeon0") + ')';
-        bossTdTableTrTh.setAttribute("onclick","toggleDungeon(" + d + ")");
-        bossTdTableTrTh.setAttribute("oncontextmenu","toggleDungeon(" + d + ",'retreat');return false;");
-        bossTdTableTr.appendChild(bossTdTableTrTh);
-
-        bossTdTable.appendChild(bossTdTableTr);
-
-        bossTd.appendChild(bossTdTable);
-
-        tr.appendChild(bossTd);
-      } else {
-        var square = document.createElement("td");
-        if(x.substring(0,5) == "chest") {
-          square.style.backgroundImage = "url(" + build_img_url("chest" + items[x]) + ')';
-        } else {
-          square.style.backgroundImage = "url(" + build_img_url(x) + ')';
-        }
-        square.id = x;
-        square.className = !!items[x];
-        square.classList.add("trackerSquare");
-        square.setAttribute("onclick","toggle('" + x + "')");
-        square.setAttribute("oncontextmenu","toggle('" + x + "','retreat');return false;");
-        tr.appendChild(square);
-      }
-
-      if(++k == itemList.length) {
-        break;
-      }
-    }
+    tracker.appendChild(tr);
+    $("tracker").appendChild(tracker);
   }
-  tracker.appendChild(tr);
-  $("tracker").appendChild(tracker);
 }
 
 function init() {

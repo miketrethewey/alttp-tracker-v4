@@ -1,0 +1,8 @@
+{
+  "short_name":        "ALttP Tracker",
+  "name":              "ALttP Tracker by crossproduct v4.0 (modified by mm1)",
+  "start_url":         "../tracker.html?launcher=true",
+  "background_color":  "#101010",
+  "theme_color":       "#101010",
+  "display":           "standalone"
+}

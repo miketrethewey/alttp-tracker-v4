@@ -61,6 +61,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
     medallion2: "ether",
     medallion3: "quake",
     dungeon4:   "pendant0",
+    tunic1:		"tunic",
     ".png":     ""
   };
 
