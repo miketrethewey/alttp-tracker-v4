@@ -17,6 +17,10 @@ table.quadSquare .trackerSquare {
   height:          32px;
 }
 
+.nothing {
+  visibility: hidden;
+}
+
 .tracker {
   background-color: rgb(0,0,0);
   position:         absolute;
@@ -137,6 +141,10 @@ td {
 }
 .retro #sword,
 .retro #shield {
+  background-size: 64px 64px;
+}
+
+.trackerSquare {
   background-size: 64px 64px;
 }
 

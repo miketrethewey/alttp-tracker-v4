@@ -2,13 +2,13 @@ class Square {
   constructor(id) {
     this.id               = id;
     this.title            = this.id.substr(0,1).toUpperCase() + this.id.slice(1);
-    this.classList        = ["trackerSquare", this.id, this.id + '-' + items[id], "false"];
+    this.classList        = ["trackerSquare", this.getCategory(), this.id + '-' + items[id], "false"];
     this.backgroundImage  = build_img_url(this.id);
     this.onLtClick        = "toggle('" + id + "','advance')";
     this.onRtClick        = this.onLtClick.replace("advance","retreat") + ";return false;";
   }
 
-  build() {
+  build(mode = "full") {
     var square = document.createElement("td");
 
     square.id     = this.id;
@@ -23,7 +23,10 @@ class Square {
     return square;
   }
 
+  getCategory() {
+    return this.id.indexOf("nothing") > -1 ? "nothing" : this.id;
 
+}
   getTitle() {
     var bosses     = ["Armos Knights","Lanmolas","Moldorm","Helmasaur King","Arrghus","Mothula","Blind","Kholdstare","Vitreous","Trinexx"];
     var dungeons   = ["Eastern Palace","Desert Palace","Tower of Hera","Palace of Darkness","Swamp Palace","Skull Woods","Thieves' Town","Ice Palace","Misery Mire","Turtle Rock"];
@@ -49,6 +52,15 @@ class Square {
           break;
         case "moonpearl":
           this.title = "Moon Pearl";
+          break;
+        case "pendant0":
+          this.title = "Pendant of Courage";
+          break;
+        case "pendant1":
+          this.title = "Pendant of Power";
+          break;
+        case "pendant2":
+          this.title = "Pendant of Wisdom";
           break;
       }
     }

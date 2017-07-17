@@ -61,7 +61,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
     medallion2: "ether",
     medallion3: "quake",
     dungeon4:   "pendant0",
-    tunic1:   "tunic",
+    tunic1:     "tunic",
     ".png":     ""
   };
 
@@ -69,9 +69,12 @@ function build_img_url(fname,useTheme = selectedTheme) {
     fname = fname.replace(replace,globalReplace[replace]);
   }
 
-  var noSupport = ["sword","shield","dungeon0"];
+  var noSupport = ["sword","shield","dungeon0","nothing"];
   if(noSupport.indexOf(fname) > -1) {
     hasSupport = false;
+  }
+  if(fname.indexOf("nothing") > -1) {
+    fname = "nothing";
   }
 
   if(! hasSupport) {
