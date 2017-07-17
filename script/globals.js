@@ -34,7 +34,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
   var defaultRoot = "images/";
   var themeRoot   = defaultRoot;
 
-  var checkForSupport         = ["bomb","boss","chest","agahnim","boss","dungeon","medallion0"];
+  fname = fname.toLowerCase();
+
+  var checkForSupport         = ["bomb","boss","chest","agahnim","boss","dungeon","label","medallion0"];
   var supportedByTheme        = [];
   supportedByTheme["retro"]   = ["boss","chest","agahnim","dungeon","medallion0"];
   supportedByTheme["vanilla"] = ["dungeon","medallion0"];
@@ -71,12 +73,26 @@ function build_img_url(fname,useTheme = selectedTheme) {
     fname = fname.replace(replace,globalReplace[replace]);
   }
 
-  var noSupport = ["sword","shield","dungeon0","label","nothing"];
+  var noSupport = ["sword","shield","dungeon0"];
   if(noSupport.indexOf(fname) > -1) {
     hasSupport = false;
   }
   if(fname.indexOf("nothing") > -1) {
-    fname = "nothing";
+    fname       = "nothing";
+    hasSupport  = false;
+  }
+
+  if(fname.indexOf("bottleitem") > -1) {
+    fname = fname.replace('itema',"item");
+    fname = fname.replace('itemb',"item");
+    fname = fname.replace('itemc',"item");
+    fname = fname.replace('itemd',"item");
+    if(fname == "bottleitem" || fname == "bottleitem1") {
+      fname = "bottle";
+      if(useTheme == "retro" || useTheme == "gbc") {
+        fname += "item1";
+      }
+    }
   }
 
   if(! hasSupport) {

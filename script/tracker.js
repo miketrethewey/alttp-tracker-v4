@@ -530,9 +530,6 @@ function init() {
     toggle(id);
     toggle(id,"retreat");
   }
-  $("tunic").style.backgroundImage = "url(" + build_img_url("tunic") + ')';
-
-  $("shield").style.backgroundImage = "url(" + build_img_url("shield") + ')';
 
   document.getElementsByTagName("body")[0].className = selectedTheme.toLowerCase();
 }
