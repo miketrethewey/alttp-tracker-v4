@@ -39,12 +39,14 @@ class BossSquare extends Square {
       th.setAttribute("oncontextmenu",this.onRtClick);
 
       if(this.medallionID >= 0) {
-        th.id                             = "medallion" + this.medallionID;
+        var medallionDungeon              = "medallion" + ((this.medallionID == 0) ? 'M' : 'T');
+        th.id                             = "dungeon" + medallionDungeon.ucfirst();
         th.style.backgroundImage          = "url(" + build_img_url("medallion0") + ')';
         th.setAttribute("onclick",        this.onLtClick.replace("toggle","toggleMedallion").replace("'" + this.id + "'",this.medallionID));
         th.setAttribute("oncontextmenu",  this.onRtClick.replace("toggle","toggleMedallion").replace("'" + this.id + "'",this.medallionID));
         th.classList.add("dungeonMedallion");
         th.classList.add("dungeonMedallion0");
+        th.classList.add("dungeon" + medallionDungeon.ucfirst());
       }
 
       tr.appendChild(th);
@@ -64,15 +66,22 @@ class BossSquare extends Square {
       // Row 2 Cell 2
       th                        = document.createElement("th");
       th.id                     = "dungeonPrize" + this.dungeonID;
-      th.style.backgroundImage  = "url(" + build_img_url("dungeon0") + ')';
       th.classList.add("corner");
-      th.classList.add("dungeonPrize");
-      th.classList.add("dungeonPrize0");
       th.setAttribute("onclick",        this.onLtClick);
       th.setAttribute("oncontextmenu",  this.onRtClick);
-      th.setAttribute("onclick",        this.onLtClick.replace("toggle","toggleDungeon").replace("'" + this.id + "'",this.dungeonID));
-      th.setAttribute("oncontextmenu",  this.onRtClick.replace("toggle","toggleDungeon").replace("'" + this.id + "'",this.dungeonID));
+      if(this.id.indexOf("bossgt") == -1) {
+        th.style.backgroundImage  = "url(" + build_img_url("dungeon0") + ')';
+        th.classList.add("dungeonPrize");
+        th.classList.add("dungeonPrize0");
+        th.setAttribute("onclick",        this.onLtClick.replace("toggle","toggleDungeon").replace("'" + this.id + "'",this.dungeonID));
+        th.setAttribute("oncontextmenu",  this.onRtClick.replace("toggle","toggleDungeon").replace("'" + this.id + "'",this.dungeonID));
+      }
+    } else {
+      table.style.backgroundPosition  = "center center";
+      table.style.backgroundRepeat    = "no-repeat";
+      table.style.width               = "100%";
     }
+
     tr.appendChild(th);
     table.appendChild(tr);
 

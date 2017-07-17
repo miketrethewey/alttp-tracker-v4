@@ -20,6 +20,18 @@ class Square {
     square.setAttribute("onclick",        this.onLtClick);
     square.setAttribute("oncontextmenu",  this.onRtClick);
 
+    if((this.id.indexOf("medallionM") > -1 || this.id.indexOf("medallionT") > -1) && mode == "mini") {
+      var medallionID                       = ((this.id.indexOf('M') > -1) ? '0' : '1');
+      var medallionDungeon                  = "medallion" + this.id.substr(this.id.indexOf("on") + 2);
+      square.id                             = medallionDungeon;
+      square.style.backgroundImage          = "url(" + build_img_url("medallion0") + ')';
+      square.setAttribute("onclick",        this.onLtClick.replace("toggle","toggleMedallion").replace("'" + this.id + "'",medallionID));
+      square.setAttribute("oncontextmenu",  this.onRtClick.replace("toggle","toggleMedallion").replace("'" + this.id + "'",medallionID));
+      square.classList.add("dungeonMedallion");
+      square.classList.add("dungeonMedallion0");
+      square.classList.add("dungeon" + medallionDungeon.ucfirst());
+    }
+
     return square;
   }
 

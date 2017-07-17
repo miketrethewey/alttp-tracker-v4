@@ -70,6 +70,8 @@ class QuadSquare extends Square {
       return new BossSquare(id);
     } else if(id.indexOf("chest") > -1) {
       return new ChestSquare(id);
+    } else if(id.indexOf("label") > -1) {
+      return new LabelSquare(id);
     } else {
       return new Square(id);
     }

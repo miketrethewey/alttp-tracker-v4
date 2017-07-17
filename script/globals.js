@@ -57,6 +57,8 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   var globalReplace = {
+    medallionM: "medallion0",
+    medallionT: "medallion0",
     medallion1: "bombos",
     medallion2: "ether",
     medallion3: "quake",
@@ -69,7 +71,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
     fname = fname.replace(replace,globalReplace[replace]);
   }
 
-  var noSupport = ["sword","shield","dungeon0","nothing"];
+  var noSupport = ["sword","shield","dungeon0","label","nothing"];
   if(noSupport.indexOf(fname) > -1) {
     hasSupport = false;
   }

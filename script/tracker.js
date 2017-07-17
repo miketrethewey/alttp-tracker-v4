@@ -73,13 +73,13 @@ function toggle(label, mode = "advance") {
     for(var ele in eles) {
       ele = eles[ele];
       if(ele.className && ele.className.length > 0 && ele.className.indexOf(label + '-' + curr) > -1) {
-        if(items[label] > 0) {
-          if(label.indexOf("tunic") > -1) {
-            miniTheme = "vanilla";
-          }
+        if(label.indexOf("tunic") > -1) {
+          miniTheme = "vanilla";
+        }
+        if(items[label] > itemsMin[label]) {
           ele.style.backgroundImage = "url(" + build_img_url(label + items[label], miniTheme) + ')';
         } else {
-          ele.style.backgroundImage = "url(" + build_img_url(label) + ')';
+          ele.style.backgroundImage = "url(" + build_img_url(label, miniTheme) + ')';
         }
         ele.classList.remove(label + '-' + curr);
         ele.classList.add(label + '-' + items[label]);
@@ -231,9 +231,20 @@ function toggleMedallion(n, mode = "advance") {
     medallions[n] = min;
   }
 
-  $("medallion" + n).style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
-  $("medallion" + n).classList.remove("dungeonMedallion" + lastMedallion)
-  $("medallion" + n).classList.add("dungeonMedallion" + medallions[n]);
+  var medallionID = "medallion" + ((n == 0) ? 'M' : 'T')
+
+  $(medallionID).style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
+  $(medallionID).classList.remove("dungeonMedallion" + lastMedallion)
+  $(medallionID).classList.add("dungeonMedallion" + medallions[n]);
+  var eles = document.getElementsByClassName("dungeon" + medallionID.ucfirst());
+  for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className.length > 0) {
+      ele.style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
+      ele.classList.remove("dungeonMedallion" + lastMedallion)
+      ele.classList.add("dungeonMedallion" + medallions[n]);
+    }
+  }
 
   if(isMap) {
     // Update availability of dungeon boss AND chests
@@ -397,11 +408,7 @@ function print_tracker() {
     if(squareID != "tunic" && squareID != "shield" && squareID != "sword" && squareID != "moonpearl") {
       var s  = [];
 
-      if(squareID.indexOf("chest") > -1) {
-        s = new ChestSquare(squareID);
-      } else if(squareID.indexOf("boss") > -1) {
-        s = new BossSquare(squareID);
-      } else if(squareID.indexOf("duo") > -1 || squareID.indexOf("tri") > -1 || squareID.indexOf("quad") > -1) {
+      if(squareID.indexOf("duo") > -1 || squareID.indexOf("tri") > -1 || squareID.indexOf("quad") > -1) {
         var multiItems  = squareID.split('-');
         id              = multiItems.shift();
         if(squareID.indexOf("duo") > -1) {
@@ -411,6 +418,10 @@ function print_tracker() {
         } else {
           s = new QuadSquare(id,multiItems);
         }
+      } else if(squareID.indexOf("boss") > -1) {
+        s = new BossSquare(squareID);
+      } else if(squareID.indexOf("chest") > -1) {
+        s = new ChestSquare(squareID);
       } else {
         s = new Square(squareID);
       }
