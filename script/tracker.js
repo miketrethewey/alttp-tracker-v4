@@ -136,6 +136,14 @@ function togglePearl() {
   $("tunic").style.backgroundImage = "url(" + build_img_url(link) + ')';
   $("tunic").classList.remove("false");
   $("tunic").classList.add("true");
+
+  var eles = document.getElementsByClassName("tunic");
+  for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className != "") {
+      ele.style.backgroundImage = "url(" + build_img_url(link,"vanilla") + ')';
+    }
+  }
 }
 
 // Event of clicking a chest on the map
@@ -524,11 +532,28 @@ function init() {
     $("sword").style.backgroundImage  = "url(" + build_img_url("sword1") + ')';
   }
 
+  toggle("moonpearl");
   var ids = ["tunic","sword","shield"];
   for(var id in ids) {
     id = ids[id];
     toggle(id);
     toggle(id,"retreat");
+  }
+  var eles = document.getElementsByClassName("tunic");
+  for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className != "") {
+      ele.style.backgroundImage = "url(" + build_img_url("tunic","vanilla") + ')';
+    }
+  }
+  var eles = document.getElementsByClassName("moonpearl");
+  for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className != "") {
+      ele.style.backgroundImage = "url(" + build_img_url("moonpearl") + ')';
+      ele.classList.remove("true");
+      ele.classList.add("false");
+    }
   }
 
   document.getElementsByTagName("body")[0].className = selectedTheme.toLowerCase();
