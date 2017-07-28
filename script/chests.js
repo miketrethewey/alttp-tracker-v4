@@ -1,3 +1,8 @@
+var BOW_NONE  = 0;
+var BOW_WOOD  = 1;
+var BOW_SLVR  = 2;
+var SILVERS   = 3;
+
 // define dungeon chests
 var dungeons = new Array;
 
@@ -8,14 +13,14 @@ dungeons[0] = {
     image: "boss02.png",
     isBeaten: false,
     isBeatable: function() {
-      if(items.bow > 1) {
+      if((items.bow > BOW_NONE && items.bow < SILVERS)) {
         return "available";
       } else {
         return "unavailable";
       }
     },
     canGetChest: function() {
-      if(items.chest0 > 1 || items.bow > 1) {
+      if(items.chest0 > 1 || (items.bow > BOW_NONE && items.bow < SILVERS)) {
         return "available";
       }
       return "possible";
@@ -87,7 +92,7 @@ dungeons[3] = {
     image: "boss32.png",
     isBeaten: false,
     isBeatable: function() {
-      if(!items.moonpearl || !(items.bow > 1) || !items.hammer) {
+      if(!items.moonpearl || !((items.bow > BOW_NONE && items.bow < SILVERS)) || !items.hammer) {
         return "unavailable";
       }
       if(!items.agahnim && !items.glove) {
@@ -102,7 +107,7 @@ dungeons[3] = {
       if(!items.agahnim && !(items.hammer && items.glove) && !(items.glove == 2 && items.flippers)) {
         return "unavailable";
       }
-      if(items.bow > 1 && (items.chest3 > 1 || items.hammer)) {
+      if((items.bow > BOW_NONE && items.bow < SILVERS) && (items.chest3 > 1 || items.hammer)) {
         return "available";
       }
       return "possible";
