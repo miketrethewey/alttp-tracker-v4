@@ -20,5 +20,8 @@ var itemsMin = {
     boss7:      1,
     boss8:      1,
     boss9:      1,
-    bossgt:     1
+    bossgt:     1,
+
+    countCrystals:	0,
+    mpupgrade:		0,
 };

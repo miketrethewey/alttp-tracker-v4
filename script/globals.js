@@ -16,6 +16,160 @@ function $(e) {
 Element.prototype.prependChild = function(child) { this.insertBefore(child, this.firstChild); };
 String.prototype.ucfirst = function () { return this.substr(0,1).toUpperCase() + this.slice(1); }
 
+function plural(input,revert = false) {
+  var plural = {
+    '(quiz)$'                     : "$1zes",
+    '^(ox)$'                      : "$1en",
+    '([m|l])ouse$'                : "$1ice",
+    '(matr|vert|ind)ix|ex$'       : "$1ices",
+    '(x|ch|ss|sh)$'               : "$1es",
+    '([^aeiouy]|qu)y$'            : "$1ies",
+    '(hive)$'                     : "$1s",
+    '(?:([^f])fe|([lr])f)$'       : "$1$2ves",
+    '(shea|lea|loa|thie)f$'       : "$1ves",
+    'sis$'                        : "ses",
+    '([ti])um$'                   : "$1a",
+    '(tomat|potat|ech|her|vet)o$' : "$1oes",
+    '(bu)s$'                      : "$1ses",
+    '(alias)$'                    : "$1es",
+    '(octop)us$'                  : "$1i",
+    '(ax|test)is$'                : "$1es",
+    '(us)$'                       : "$1es",
+    '([^s]+)$'                    : "$1s"
+  };
+
+  var singular = {
+    '(quiz)zes$'              : "$1",
+    '(matr)ices$'             : "$1ix",
+    '(vert|ind)ices$'         : "$1ex",
+    '^(ox)en$'                : "$1",
+    '(alias)es$'              : "$1",
+    '(octop|vir)i$'           : "$1us",
+    '(cris|ax|test)es$'       : "$1is",
+    '(shoe)s$'                : "$1",
+    '(o)es$'                  : "$1",
+    '(bus)es$'                : "$1",
+    '([m|l])ice$'             : "$1ouse",
+    '(x|ch|ss|sh)es$'         : "$1",
+    '(m)ovies$'               : "$1ovie",
+    '(s)eries$'               : "$1eries",
+    '([^aeiouy]|qu)ies$'      : "$1y",
+    '([lr])ves$'              : "$1f",
+    '(tive)s$'                : "$1",
+    '(hive)s$'                : "$1",
+    '(li|wi|kni)ves$'         : "$1fe",
+    '(shea|loa|lea|thie)ves$' : "$1f",
+    '(^analy)ses$'            : "$1sis",
+    '((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$': "$1$2sis",
+    '([ti])a$'                : "$1um",
+    '(n)ews$'                 : "$1ews",
+    '(h|bl)ouses$'            : "$1ouse",
+    '(corpse)s$'              : "$1",
+    '(us)es$'                 : "$1",
+    's$'                      : ""
+  };
+
+  var irregular = {
+    'move'   : 'moves',
+    'foot'   : 'feet',
+    'goose'  : 'geese',
+    'sex'    : 'sexes',
+    'child'  : 'children',
+    'man'    : 'men',
+    'tooth'  : 'teeth',
+    'person' : 'people'
+  };
+
+  var uncountable = [
+    'sheep',
+    'fish',
+    'deer',
+    'moose',
+    'series',
+    'species',
+    'money',
+    'rice',
+    'information',
+    'equipment'
+  ];
+
+  // save some time in the case that singular and plural are the same
+  if(uncountable.indexOf(input.toLowerCase()) >= 0) {
+    return input;
+  }
+
+  // check for irregular forms
+  for(word in irregular) {
+
+    if(revert) {
+      var pattern = new RegExp(irregular[word]+'$', 'i');
+      var replace = word;
+    } else {
+      var pattern = new RegExp(word+'$', 'i');
+      var replace = irregular[word];
+    }
+    if(pattern.test(input)) {
+      return input.replace(pattern, replace);
+    }
+  }
+
+  if(revert) {
+    var array = singular;
+  } else {
+    var array = plural;
+  }
+
+  // check for matches using regular expressions
+  for(reg in array) {
+    var pattern = new RegExp(reg, 'i');
+    if(pattern.test(input)) {
+        return input.replace(pattern, array[reg]);
+    }
+  }
+  return input;
+}
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+/**
+ *
+ * @param string $id  Element ID
+ * @param string $count count
+ *
+ * @return    void
+ *
+ */
+function change_count(id,count) {
+  if($(id) != null && $(id + "IMG") != null && $(id + "Value") != null) {
+    $(id + "IMG").innerHTML = "";
+    if(count < 0) {
+      count = 0;
+    } else if(itemsMax[id] != null && count > itemsMax[id]) {
+      count = itemsMax[id];
+    } else if(count > 999) {
+      count = 999;
+    }
+    var digits = (count + "").split("");
+    for(var digit in digits) {
+      digit = digits[digit];
+      $(id + "IMG").innerHTML += '<img src="images/numbers/' + digit + '.png" class="countNumber" />';
+    }
+    $(id + "Value").innerHTML = count;
+    items[id] = count;
+  }
+}
+
+// Clear selection
+function clear_selection() {
+  if(document.selection) {
+    document.selection.empty();
+  } else if(window.getSelection) {
+    window.getSelection().removeAllRanges();
+  }
+}
+
 function getQuery(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
@@ -59,6 +213,10 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   var globalReplace = {
+    blumerang:  "boomerang1",
+    bluemerang: "boomerang1",
+    redmerang:  "boomerang2",
+    crystal:    "dungeon1",
     medallionM: "medallion0",
     medallionT: "medallion0",
     medallion1: "bombos",
@@ -115,8 +273,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
     themeRoot += "chests/";
   } else if(fname.indexOf("boss") > -1) {
     themeRoot += "bosses/";
+  } else if(isNumeric(fname)) {
+    themeRoot += "numbers/";
   }
-
   return themeRoot + fname + ".png";
 }
 

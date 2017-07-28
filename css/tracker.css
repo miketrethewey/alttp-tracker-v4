@@ -148,6 +148,24 @@ td {
   background-size: 64px 64px;
 }
 
+.multiSquare .trackerSquare {
+  background-size: 32px 32px !important;
+}
+
+.countTable {
+  width: 100%;
+}
+.countSquare {
+  background-size: 56px 56px;
+}
+.countSquare .value {
+  display: none;
+}
+.countNumber {
+  width:  18px;
+  height: 18px;
+}
+
 .dungeonPrize, .dungeonMedallion {
   background-color:           rgb(0,0,0);
   background-size:            32px 32px;

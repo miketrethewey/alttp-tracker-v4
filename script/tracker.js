@@ -27,9 +27,27 @@ function toggle(label, mode = "advance") {
         $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
       }
     }
-    return;
-  }
 
+    clear_selection();
+    return;
+  } else if(label.substring(0,5) == "count") {
+    if(mode == "advance") {
+	  items[label]++;
+	} else {
+	  items[label]--;
+	}
+
+	if(items[label] < 0) {
+	  items[label] = itemsMax[label];
+	} else if(items[label] > itemsMax[label]) {
+	  items[label] = 0;
+	}
+
+    change_count(label,items[label]);
+
+    clear_selection();
+	return;
+  }
   if((typeof items[label]) == "boolean") {
     $(label).classList.remove(curr);
     $(label).classList.add((items[label] = !items[label]));
@@ -121,6 +139,8 @@ function toggle(label, mode = "advance") {
       toggleBoss(label.substring(4));
     }
   }
+
+  clear_selection();
 }
 
 // BUNNY TIME!!!
@@ -282,6 +302,7 @@ function build_lonk() {
   // td
   var lonkTd = document.createElement("td");
   lonkTd.id = "tunic";
+  lonkTd.classList.add("tunic");
   lonkTd.style.backgroundImage = "url(" + build_img_url("tunic") + ')';
   lonkTd.setAttribute("colspan",2);
   lonkTd.setAttribute("rowspan",2);
@@ -307,6 +328,7 @@ function build_lonk() {
         //  td table tr td : Build Sword
   var td = document.createElement("td");
   td.id = "sword";
+  td.classList.add("sword");
   td.setAttribute("onclick","toggle('sword')");
   td.setAttribute("oncontextmenu","toggle('sword','retreat');return false;");
 
@@ -322,6 +344,7 @@ function build_lonk() {
         // td table tr td : Build Shield
   td = document.createElement("td");
   td.id = "shield";
+  td.classList.add("shield");
   td.setAttribute("onclick","toggle('shield')");
   td.setAttribute("oncontextmenu","toggle('shield','retreat');return false;");
 
@@ -375,7 +398,8 @@ function build_lonk() {
           // td table tr th table tr th : Build Pearl
   pearlTableTrTh = document.createElement("th");
   pearlTableTrTh.id = "moonpearl";
-  pearlTableTrTh.className = "false";
+  pearlTableTrTh.classList.add("false");
+  pearlTableTrTh.classList.add("moonpearl");
   pearlTableTrTh.style.backgroundImage = "url(" + build_img_url("moonpearl") + ')';
   pearlTableTrTh.style.width = "48px";
   pearlTableTrTh.style.height = "48px";
@@ -430,6 +454,8 @@ function print_tracker() {
         s = new BossSquare(squareID);
       } else if(squareID.indexOf("chest") > -1) {
         s = new ChestSquare(squareID);
+      } else if(squareID.indexOf("count") > -1) {
+        s = new CountSquare(squareID);
       } else {
         s = new Square(squareID);
       }
@@ -532,7 +558,6 @@ function init() {
     $("sword").style.backgroundImage  = "url(" + build_img_url("sword1") + ')';
   }
 
-  toggle("moonpearl");
   var ids = ["tunic","sword","shield"];
   for(var id in ids) {
     id = ids[id];
@@ -546,6 +571,8 @@ function init() {
       ele.style.backgroundImage = "url(" + build_img_url("tunic","vanilla") + ')';
     }
   }
+  $("tunic").style.backgroundImage = "url(" + build_img_url("tunic") + ')';
+
   var eles = document.getElementsByClassName("moonpearl");
   for(var ele in eles) {
     ele = eles[ele];
@@ -558,4 +585,3 @@ function init() {
 
   document.getElementsByTagName("body")[0].className = selectedTheme.toLowerCase();
 }
-
