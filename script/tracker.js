@@ -16,11 +16,24 @@ function toggle(label, mode = "advance") {
       items[label] = 0;
     }
 
-    $(label).style.backgroundImage = ("url(" + build_img_url("chest" + items[label]) + ')');
+    var count = items[label];
+    if(count > 9) {
+      count = "many";
+    }
+
+    $(label).style.backgroundImage = ("url(" + build_img_url("chest" + count) + ')');
     $(label).classList.remove(label + '-' + curr);
     $(label).classList.add(label + '-' + items[label]);
+
     x = label.substring(5);
-    if(isMap) {
+
+    if($("dungeonChestMini" + x)) {
+      $("dungeonChestMini" + x).style.backgroundImage = ("url(" + build_img_url("chest" + count + "-mini") + ')');
+      var s = new Square(label);
+      $("dungeonChestMini" + x).title = s.getTitle() + " - " + items[label];
+    }
+
+    if(isMap && x != "e" && x != "gt") {
       if(items[label] == 0) {
         $("dungeon" + x).className = "dungeon opened";
       } else {
@@ -32,21 +45,21 @@ function toggle(label, mode = "advance") {
     return;
   } else if(label.substring(0,5) == "count") {
     if(mode == "advance") {
-	  items[label]++;
-	} else {
-	  items[label]--;
-	}
+     items[label]++;
+    } else {
+      items[label]--;
+    }
 
-	if(items[label] < 0) {
-	  items[label] = itemsMax[label];
-	} else if(items[label] > itemsMax[label]) {
-	  items[label] = 0;
-	}
+    if(items[label] < 0) {
+      items[label] = itemsMax[label];
+    } else if(items[label] > itemsMax[label]) {
+      items[label] = 0;
+    }
 
     change_count(label,items[label]);
 
     clear_selection();
-	return;
+    return;
   }
   if((typeof items[label]) == "boolean") {
     $(label).classList.remove(curr);

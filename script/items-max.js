@@ -32,7 +32,8 @@ var itemsMax = {
     chest7:     3,
     chest8:     2,
     chest9:     5,
+    chestgt:    22,
 
-    countCrystals:	7,
-    mpupgrade:		2,
+    countCrystals:  7,
+    mpupgrade:      2,
 };

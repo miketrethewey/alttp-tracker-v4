@@ -58,19 +58,27 @@ class BossSquare extends Square {
       th = document.createElement("th");
 
       // Row 2 Cell 1
+      th.id = "dungeonChestMini" + this.dungeonID;
       th.classList.add("corner");
-      th.setAttribute("onclick",this.onLtClick);
-      th.setAttribute("oncontextmenu",this.onRtClick);
+      th.classList.add("dungeonChestMini");
+      th.classList.add("dungeonChestMini" + this.dungeonID);
+      th.setAttribute("onclick",        "toggle('chest" + this.dungeonID + "')");
+      th.setAttribute("oncontextmenu",  "toggle('chest" + this.dungeonID + "','retreat');return false;");
+      var count = itemsMax["chest" + this.dungeonID];
+      if(count > 9) {
+        count = "many";
+      }
+      th.style.backgroundImage = "url(" + build_img_url("chest" + count + "-mini") + ')';
       tr.appendChild(th);
 
       // Row 2 Cell 2
-      th                        = document.createElement("th");
-      th.id                     = "dungeonPrize" + this.dungeonID;
+      th                                = document.createElement("th");
+      th.id                             = "dungeonPrize" + this.dungeonID;
       th.classList.add("corner");
       th.setAttribute("onclick",        this.onLtClick);
       th.setAttribute("oncontextmenu",  this.onRtClick);
       if(this.id.indexOf("bossgt") == -1) {
-        th.style.backgroundImage  = "url(" + build_img_url("dungeon0") + ')';
+        th.style.backgroundImage          = "url(" + build_img_url("dungeon0") + ')';
         th.classList.add("dungeonPrize");
         th.classList.add("dungeonPrize0");
         th.setAttribute("onclick",        this.onLtClick.replace("toggle","toggleDungeon").replace("'" + this.id + "'",this.dungeonID));

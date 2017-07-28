@@ -40,14 +40,16 @@ class Square {
 
 }
   getTitle() {
-    var bosses     = ["Armos Knights","Lanmolas","Moldorm","Helmasaur King","Arrghus","Mothula","Blind","Kholdstare","Vitreous","Trinexx"];
-    var dungeons   = ["Eastern Palace","Desert Palace","Tower of Hera","Palace of Darkness","Swamp Palace","Skull Woods","Thieves' Town","Ice Palace","Misery Mire","Turtle Rock"];
-    if(this.title.toLowerCase().indexOf("boss") > -1) {
+    var bosses      = ["Armos Knights","Lanmolas","Moldorm","Helmasaur King","Arrghus","Mothula","Blind","Kholdstare","Vitreous","Trinexx"];
+    var dungeons    = ["Eastern Palace","Desert Palace","Tower of Hera","Palace of Darkness","Swamp Palace","Skull Woods","Thieves' Town","Ice Palace","Misery Mire","Turtle Rock"];
+    bosses["gt"]    = "Agahnim";
+    dungeons["gt"]  = "Ganon's Tower";
+    if(this.id.toLowerCase().indexOf("boss") > -1) {
       this.title = dungeons[this.dungeonID];
-    } else if(this.title.toLowerCase().indexOf("chest") > -1) {
+    } else if(this.id.toLowerCase().indexOf("chest") > -1) {
       this.title = dungeons[this.dungeonID];
     } else {
-      switch(this.title.toLowerCase()) {
+      switch(this.id.toLowerCase()) {
         case "byrna":
         case "somaria":
           this.title = "Cane of " + this.title;
