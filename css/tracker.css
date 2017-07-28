@@ -17,6 +17,13 @@ table.quadSquare .trackerSquare {
   height:          32px;
 }
 
+form, #disclaimer {
+  width: 100%;
+}
+form {
+  text-align:right;
+}
+
 .nothing {
   visibility: hidden;
 }
@@ -130,6 +137,10 @@ td {
 
 .possible {
   background-color: rgb(255,255,0);
+}
+
+.dark {
+  background-color: rgb(0,0,255);
 }
 
 .opened {
