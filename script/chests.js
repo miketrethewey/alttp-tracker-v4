@@ -131,7 +131,7 @@ dungeons[3] = {
 };
 
 dungeons[4] = {
-    name: "Palace of Darkness " + mini("lantern"),
+    name: "Swamp Palace",
     x: "73.5%",
     y: "91.0%",
     image: "boss42.png",
@@ -176,11 +176,11 @@ dungeons[4] = {
         } else {
           return "unavailable";
         }
-        if(items.hammer) {
-          return "available";
-        }
-        return "possible";
       }
+      if(items.hammer) {
+        return "available";
+      }
+      return "possible";
     }
 };
 
@@ -768,7 +768,7 @@ chests[28] = {
     y: "52.2%",
     isOpened: false,
     isAvailable: function() {
-      if(items.moonpearl && items.glove == 2 && items.mirror) {
+      if(items.moonpearl && items.glove == 2) {
         return "available";
       }
       return "unavailable";
@@ -1200,12 +1200,12 @@ chests[59] = {
 };
 
 chests[60] = {
-    name: "Take the frog home " + mini("mirror"),
+    name: "Take the frog home",
     x: "15.2%",
     y: "51.8%",
     isOpened: false,
     isAvailable: function() {
-      if(items.moonpearl && items.glove == 2 && items.mirror) {
+      if(items.moonpearl && items.glove == 2) {
         return "available";
       }
       return "unavailable";
