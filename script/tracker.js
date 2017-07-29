@@ -43,6 +43,7 @@ function toggle(label, mode = "advance") {
     }
 
     clear_selection();
+    check_gomode();
     return;
   } else if(label.substring(0,5) == "count") {
     if(mode == "advance") {
@@ -60,6 +61,7 @@ function toggle(label, mode = "advance") {
     change_count(label,items[label]);
 
     clear_selection();
+    check_gomode();
     return;
   }
   if((typeof items[label]) == "boolean") {
@@ -155,6 +157,7 @@ function toggle(label, mode = "advance") {
   }
 
   clear_selection();
+  check_gomode();
 }
 
 // BUNNY TIME!!!
@@ -253,6 +256,7 @@ function toggleDungeon(n, mode = "advance") {
       }
     }
   }
+  check_gomode();
 }
 
 // event of clicking on Mire/TRock's medallion subsquare
@@ -309,6 +313,7 @@ function toggleMedallion(n, mode = "advance") {
     }
     dungeons[8 + n].name = dungeonName + " " + mini("medallion" + medallions[n]) + " " + mini("lantern");
   }
+  check_gomode();
 }
 
 function build_lonk() {
@@ -470,6 +475,8 @@ function print_tracker() {
         s = new ChestSquare(squareID);
       } else if(squareID.indexOf("count") > -1) {
         s = new CountSquare(squareID);
+      } else if(squareID.indexOf("gomode") > -1) {
+        s = new GoModeSquare(squareID);
       } else {
         s = new Square(squareID);
       }

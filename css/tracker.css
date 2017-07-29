@@ -200,3 +200,20 @@ td {
   border-bottom-left-radius:  0%;
   border-bottom-right-radius: 0%;
 }
+
+#gomode {
+  color:         #000000;
+  border-radius: 50%;
+  text-align:    center;
+}
+#gomode span {
+  font-weight: bold;
+  line-height: 64px;
+  font-size:   150%;
+}
+#gomode.hard {
+  background-color: #80ff80;
+}
+#gomode.soft {
+  background-color: #ffff80;
+}

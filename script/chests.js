@@ -1,8 +1,3 @@
-var BOW_NONE  = 0;
-var BOW_WOOD  = 1;
-var BOW_SLVR  = 2;
-var SILVERS   = 3;
-
 // define dungeon chests
 var dungeons = new Array;
 

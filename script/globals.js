@@ -2,6 +2,10 @@ var GREEN_PENDANT = 4;
 var OTHER_PENDANT = 3;
 var OTHER_CRYSTAL = 1;
 var OJ_CRYSTAL    = 2;
+var BOW_NONE      = 0;
+var BOW_WOOD      = 1;
+var BOW_SLVR      = 2;
+var SILVERS       = 3;
 var rowLength     = 7;
 var prizes        = [];
 var medallions    = [0, 0];
@@ -291,6 +295,137 @@ function steve() {
     return true;
   }
   return items.agahnim && items.hookshot && (items.hammer || items.glove || items.flippers);
+}
+
+function add_class(id,className) {
+  if($(id)) {
+    className = className.split(' ');
+    for(str in className) {
+      str = className[str];
+      $(id).classList.add(str);
+    }
+
+}}
+
+function replace_class(id,oldClass,newClass) {
+  if($(id)) {
+    if(oldClass != "") {
+      $(id).classList.remove(oldClass);
+    }
+    if(newClass != "") {
+      $(id).classList.add(newClass);
+  
+}
+}}
+
+function change_title(id,title) {
+  if($(id)) {
+    $(id).title = title;
+  }
+}
+
+// Check for GO MODE
+function check_gomode() {
+  var go      = true;       // Default to GO MODE
+  var softGo  = false;      // Default to Hard GO MODE
+  var gomode  = new Array(  // Items required for GO MODE
+    "hookshot",             // Swamp
+    "moonpearl",            // DW Dungeons
+    "firerod",              // SkWoods
+    "hammer",               // PoD, Swamp, SkWoods, Thieves'
+    "somaria"               // Mire, TRock
+  );
+
+  // Check if we have required items
+  for(var item in gomode) {
+    item  = gomode[item];
+    go    = go && items[item];
+  }
+
+  // Check for at least L2 Sword, wooden arrows and Titans Mitt
+  go = go && items.sword >= 2 && items.bow >= BOW_WOOD && items.bow <= BOW_SLVR && items.glove >= 2;
+
+  var availableCrystals = 0;
+  var acquiredCrystals  = 0;
+  var beatableTotal     = 0;
+
+  // Count crystals and check dungeon status
+  for(var i = 0; i < 10; i++) {
+    var prizeImg  = $("dungeonPrize" + i);
+    var bossImg   = $("boss" + i);
+
+    prizeImg  = prizeImg  != null ? prizeImg.style.backgroundImage  : "";
+    bossImg   = bossImg   != null ? bossImg.style.backgroundImage   : "";
+
+    if(prizeImg != "" && bossImg != "") {
+      if(dungeons[i].isBeatable() == "available") {
+        beatableTotal++;
+      }
+      if(dungeons[i].isBeaten) {
+        if(prizeImg.indexOf("dungeon" + GREEN_PENDANT) > -1) {
+          console.log("Green Pendant!");
+          replace_class("pgreen","false","true");
+          replace_class("pendant0","false","true");
+          replace_class("pendantsSquarePgreenIMG","false","true");
+          var check = check_checkmark("pgreen"); // Check if we have a checkmark for this tracker
+          if(check == 3) {
+            change_class("pendantsSquarePgreenIMG","true done");
+          }
+        }
+      }
+
+      if(prizeImg.indexOf("dungeon" + OTHER_CRYSTAL) > -1 || prizeImg.indexOf("dungeon" + OJ_CRYSTAL) > -1) {
+        if(dungeons[i].isBeaten) {
+          availableCrystals++;
+          acquiredCrystals++;
+        } else if(dungeons[i].isBeatable() == "available" || dungeons[i].isBeatable() == "possible") {
+          availableCrystals++;
+          if(dungeons[i].isBeatable() == "possible") {
+            softGo = true;
+          }
+        }
+      }
+    }
+
+    var id = "countcrystals";
+    if(($(id) != null) && ($(id + "Value") != null) && (parseInt($(id + "Value").innerHTML) < beatenCrystals)) {
+      change_count(id,acquiredCrystals);
+    }
+  }
+
+  console.log("");
+  console.log("Available Crystals: " + availableCrystals);
+  console.log("Acquired  Crystals: " + acquiredCrystals);
+  console.log("Beatable  Dungeons: " + beatableTotal);
+
+  // If we do not have 7 in our possession or accessible, we are not GO MODE
+  if(!(availableCrystals >= 7 || beatableTotal == 10)) {
+    go      = false;
+    softGo  = false;
+  }
+
+  // If we are GO MODE
+  if(go || softGo) {
+    var goClass = "";
+    // L2 Sword or Silverless is a SOFT GO MODE
+    if(items.sword == 2 || items.bow == BOW_WOOD || softGo) {
+      goClass = "soft";
+    } else {
+      // We are 100% GO MODE
+      goClass = "hard";
+    }
+    replace_class("gomode","false", "true");
+    replace_class("gomode","hidden","");
+    replace_class("gomode","soft",  goClass);
+    replace_class("gomode","hard",  goClass);
+  } else {
+    // If we are NOT GO MODE
+    replace_class("gomode","true","false");
+    replace_class("gomode","soft","hidden");
+    replace_class("gomode","hard","hidden");
+  }
+
+  clear_selection();
 }
 
 selectedTheme = getQuery("theme") != "" ? getQuery("theme") : "default";
