@@ -58,17 +58,18 @@ class BossSquare extends Square {
       th = document.createElement("th");
 
       // Row 2 Cell 1
+      var count = itemsMax["chest" + this.dungeonID];
+      if(count > 9) {
+        count = "many";
+      }
       th.id = "dungeonChestMini" + this.dungeonID;
       th.classList.add("corner");
       th.classList.add("dungeonChestMini");
       th.classList.add("dungeonChestMini" + this.dungeonID);
       th.setAttribute("onclick",        "toggle('chest" + this.dungeonID + "')");
       th.setAttribute("oncontextmenu",  "toggle('chest" + this.dungeonID + "','retreat');return false;");
-      var count = itemsMax["chest" + this.dungeonID];
-      if(count > 9) {
-        count = "many";
-      }
-      th.style.backgroundImage = "url(" + build_img_url("chest" + count + "-mini") + ')';
+      th.title                  = this.getTitle() + " - " + count;
+      th.style.backgroundImage  = "url(" + build_img_url("chest" + count + "-mini") + ')';
       tr.appendChild(th);
 
       // Row 2 Cell 2

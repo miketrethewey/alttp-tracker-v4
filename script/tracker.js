@@ -4,6 +4,9 @@ function toggle(label, mode = "advance") {
   var eles = document.getElementsByClassName(label);
 
   if(label.substring(0,5) == "chest") {
+    var x   = label.substring(5);
+    var cS  = new ChestSquare("chest" + x);
+
     if(mode == "advance") {
       items[label]--;
     } else {
@@ -21,16 +24,14 @@ function toggle(label, mode = "advance") {
       count = "many";
     }
 
-    $(label).style.backgroundImage = ("url(" + build_img_url("chest" + count) + ')');
+    $(label).style.backgroundImage  = ("url(" + build_img_url("chest" + count) + ')');
+    $(label).title                  = cS.getTitle();
     $(label).classList.remove(label + '-' + curr);
     $(label).classList.add(label + '-' + items[label]);
 
-    x = label.substring(5);
-
     if($("dungeonChestMini" + x)) {
       $("dungeonChestMini" + x).style.backgroundImage = ("url(" + build_img_url("chest" + count + "-mini") + ')');
-      var s = new Square(label);
-      $("dungeonChestMini" + x).title = s.getTitle() + " - " + items[label];
+      $("dungeonChestMini" + x).title = cS.getTitle();
     }
 
     if(isMap && x != "e" && x != "gt") {

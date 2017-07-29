@@ -37,17 +37,18 @@ class Square {
 
   getCategory() {
     return this.id.indexOf("nothing") > -1 ? "nothing" : this.id;
+  }
 
-}
   getTitle() {
     var bosses      = ["Armos Knights","Lanmolas","Moldorm","Helmasaur King","Arrghus","Mothula","Blind","Kholdstare","Vitreous","Trinexx"];
     var dungeons    = ["Eastern Palace","Desert Palace","Tower of Hera","Palace of Darkness","Swamp Palace","Skull Woods","Thieves' Town","Ice Palace","Misery Mire","Turtle Rock"];
     bosses["gt"]    = "Agahnim";
     dungeons["gt"]  = "Ganon's Tower";
-    if(this.id.toLowerCase().indexOf("boss") > -1) {
+    if((this.id.toLowerCase().indexOf("boss") > -1) || (this.id.toLowerCase().indexOf("chest") > -1) || (this.id.toLowerCase().indexOf("dungeonchestmini") > -1)) {
       this.title = dungeons[this.dungeonID];
-    } else if(this.id.toLowerCase().indexOf("chest") > -1) {
-      this.title = dungeons[this.dungeonID];
+      if(this.id.toLowerCase().indexOf("boss") == -1 && items[this.id] > 0) {
+        this.title += " - " + items[this.id];
+      }
     } else {
       switch(this.id.toLowerCase()) {
         case "byrna":
