@@ -66,7 +66,7 @@ var items = {
 
     "quadSticks-firerod-icerod-somaria-byrna": false,
     "triMedallions-bombos-ether-quake": false,
-    nothing8: 0,
+    gomode: 0,
     "triEquipment-tunic-shield-sword": 0,
     "quadAItems-boots-glove-flippers-moonpearl": false,
     "triPendants-pendant0-pendant1-pendant2": 0,
@@ -85,7 +85,7 @@ var items = {
     mirror:     false,
     "quadLWBosses-boss0-boss1-boss2-agahnim": 0,
     "quadDWBosses1-boss3-boss4-boss5-boss6": 0,
-    "triDWBosses2-boss7-boss8-boss9": 0
+    "triDWBosses2-boss7-boss8-boss9": 0,
 };
 
 itemsMin["bottleItemA"] = 0;

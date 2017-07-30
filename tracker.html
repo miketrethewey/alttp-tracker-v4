@@ -7,6 +7,7 @@
   <script src="script/squares/BossSquare.js"></script>
   <script src="script/squares/ChestSquare.js"></script>
   <script src="script/squares/CountSquare.js"></script>
+  <script src="script/squares/GoModeSquare.js"></script>
   <script src="script/squares/LabelSquare.js"></script>
   <script src="script/squares/QuadSquare.js"></script>
   <script src="script/squares/TriSquare.js"></script>
@@ -17,11 +18,14 @@
   <script src="script/tracker.js"></script>
   <script src="script/items/items-min.js"></script>
   <script src="script/items/items-max.js"></script>
-  <script src="script/profiles/items-default.js"></script>
+  <script>
+  document.write("<scr" + "ipt src='script/profiles/items-"  +selectedProfile + ".js'></scr" + "ipt>");
+  </script>
 </head>
 <body>
   <div id="tracker"></div>
   <div id="mapDiv"></div>
+  <div id="options"></div>
   <div id="disclaimer">Not supported by crossproduct. Please support the <a href="http://www.twitch.tv/crossproduct/">official release</a>.</div>
 <script>
 init();

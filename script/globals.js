@@ -1,17 +1,18 @@
-var GREEN_PENDANT = 4;
-var OTHER_PENDANT = 3;
-var OTHER_CRYSTAL = 1;
-var OJ_CRYSTAL    = 2;
-var BOW_NONE      = 0;
-var BOW_WOOD      = 1;
-var BOW_SLVR      = 2;
-var SILVERS       = 3;
-var rowLength     = 7;
-var prizes        = [];
-var medallions    = [0, 0];
-var isMap         = false;
-var isOpen        = false;
-var selectedTheme = "default";
+var GREEN_PENDANT   = 4;
+var OTHER_PENDANT   = 3;
+var OTHER_CRYSTAL   = 1;
+var OJ_CRYSTAL      = 2;
+var BOW_NONE        = 0;
+var BOW_WOOD        = 1;
+var BOW_SLVR        = 2;
+var SILVERS         = 3;
+var rowLength       = 7;
+var prizes          = [];
+var medallions      = [0, 0];
+var isMap           = false;
+var isOpen          = false;
+var selectedTheme   = "default";
+var selectedProfile = "default";
 
 function $(e) {
   return document.getElementById(e);
@@ -235,7 +236,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
     fname = fname.replace(replace,globalReplace[replace]);
   }
 
-  var noSupport = ["sword","shield","dungeon0"];
+  var noSupport = ["sword","shield","dungeon0","mpupgrade"];
   if(noSupport.indexOf(fname) > -1) {
     hasSupport = false;
   }
@@ -314,9 +315,21 @@ function replace_class(id,oldClass,newClass) {
     }
     if(newClass != "") {
       $(id).classList.add(newClass);
-  
+    }
+  }
+  var eles = document.getElementsByClassName(id);
+  for(var ele in eles) {
+    ele = eles[ele];
+    if(ele.className && ele.className != "") {
+      if(oldClass != "") {
+        ele.classList.remove(oldClass);
+      }
+      if(newClass != "") {
+        ele.classList.add(newClass);
+      }
+    }
+  }
 }
-}}
 
 function change_title(id,title) {
   if($(id)) {
@@ -345,9 +358,10 @@ function check_gomode() {
   // Check for at least L2 Sword, wooden arrows and Titans Mitt
   go = go && items.sword >= 2 && items.bow >= BOW_WOOD && items.bow <= BOW_SLVR && items.glove >= 2;
 
-  var availableCrystals = 0;
-  var acquiredCrystals  = 0;
-  var beatableTotal     = 0;
+  var availableCrystals     = 0;
+  var acquiredCrystals      = 0;
+  var acquiredOtherPendants = 0;
+  var beatableTotal         = 0;
 
   // Count crystals and check dungeon status
   for(var i = 0; i < 10; i++) {
@@ -363,13 +377,25 @@ function check_gomode() {
       }
       if(dungeons[i].isBeaten) {
         if(prizeImg.indexOf("dungeon" + GREEN_PENDANT) > -1) {
-          console.log("Green Pendant!");
-          replace_class("pgreen","false","true");
-          replace_class("pendant0","false","true");
-          replace_class("pendantsSquarePgreenIMG","false","true");
           var check = check_checkmark("pgreen"); // Check if we have a checkmark for this tracker
           if(check == 3) {
             change_class("pendantsSquarePgreenIMG","true done");
+          }
+        } else if(prizeImg.indexOf("dungeon" + OTHER_PENDANT) > -1) {
+          acquiredOtherPendants++;
+          if(acquiredOtherPendants == 2) {
+            var others = ["pendant1","pendant2","pblue","pred"];
+            for(var check in others) {
+              check = others[check];
+              var eles = document.getElementsByClassName(check);
+              for(var ele in eles) {
+                ele = eles[ele];
+                if(ele.className && ele.className != "") {
+                  ele.classList.remove("false");
+                  ele.classList.add("true");
+                }
+              }
+            }
           }
         }
       }
@@ -387,16 +413,11 @@ function check_gomode() {
       }
     }
 
-    var id = "countcrystals";
-    if(($(id) != null) && ($(id + "Value") != null) && (parseInt($(id + "Value").innerHTML) < beatenCrystals)) {
+    var id = "countCrystals";
+    if(($(id) != null) && ($(id + "Value") != null) && (parseInt($(id + "Value").innerHTML) < acquiredCrystals)) {
       change_count(id,acquiredCrystals);
     }
   }
-
-  console.log("");
-  console.log("Available Crystals: " + availableCrystals);
-  console.log("Acquired  Crystals: " + acquiredCrystals);
-  console.log("Beatable  Dungeons: " + beatableTotal);
 
   // If we do not have 7 in our possession or accessible, we are not GO MODE
   if(!(availableCrystals >= 7 || beatableTotal == 10)) {
@@ -428,6 +449,7 @@ function check_gomode() {
   clear_selection();
 }
 
-selectedTheme = getQuery("theme") != "" ? getQuery("theme") : "default";
-isMap         = getQuery("map")   != "";
-isOpen        = getQuery("open")  != "";
+selectedTheme   = getQuery("theme")   != "" ? getQuery("theme")   : "default";
+selectedProfile = getQuery("profile") != "" ? getQuery("profile") : "default";
+isMap           = getQuery("map")     != "";
+isOpen          = getQuery("open")    != "";

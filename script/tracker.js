@@ -201,6 +201,20 @@ function toggleBoss(x) {
   } else {
     $("bossMap" + x).className = "boss " + dungeons[x].isBeatable();
   }
+  if(prizes[x] == GREEN_PENDANT) {
+    var green = ["pendant0","pgreen"];
+    for(var check in green) {
+      check = green[check];
+      var eles = document.getElementsByClassName(check);
+      for(var ele in eles) {
+        ele = eles[ele];
+        if(ele.className && ele.className != "") {
+          ele.classList.remove(! dungeons[x].isBeaten);
+          ele.classList.add(dungeons[x].isBeaten);
+        }
+      }
+    }
+  }
 }
 
 // Highlights a chest location and shows the name as caption
@@ -500,6 +514,12 @@ function print_tracker() {
 }
 
 function init() {
+  if(selectedProfile != "default") {
+    var script = document.createElement("script");
+    script.src = "script/profiles/items-" + selectedProfile + ".js";
+    document.getElementsByTagName("head")[0].appendChild(script);
+
+}
   print_tracker();
 
   if(isMap) {
@@ -514,8 +534,44 @@ function init() {
 
   var form  = document.createElement("form");
   form.id   = "form";
-  $("disclaimer").prependChild(form);
 
+  // Map toggle
+  var span  = document.createElement("span");
+  var label = document.createElement("label");
+  var input = document.createElement("input");
+
+  label.innerHTML = "Map?";
+  label.setAttribute("for","map");
+  span.appendChild(label);
+
+  input.id    = "map";
+  input.name  = "map";
+  input.type  = "checkbox";
+  input.setAttribute("onchange",'$("form").submit()');
+  span.appendChild(input);
+
+  form.appendChild(span);
+  form.innerHTML += "<br />";
+
+  // Open Mode toggle
+  span  = document.createElement("span");
+  label = document.createElement("label");
+  input = document.createElement("input");
+
+  label.innerHTML = "Open Mode?";
+  label.setAttribute("for","open");
+  span.appendChild(label);
+
+  input.id    = "open";
+  input.name  = "open";
+  input.type  = "checkbox";
+  input.setAttribute("onchange",'$("map").checked="on";$("form").submit()');
+  span.appendChild(input);
+
+  form.appendChild(span);
+  form.innerHTML += "<br />";
+
+  // Theme
   var select  = document.createElement("select");
   select.id   = "theme";
   select.name = "theme";
@@ -528,45 +584,33 @@ function init() {
     select.appendChild(option);
   }
   select.setAttribute("onchange",'$("form").submit()');
+  form.innerHTML += "Theme: ";
   form.appendChild(select);
   form.innerHTML += "<br />";
 
-  var span  = document.createElement("span");
-  var label = document.createElement("label");
-  var input = document.createElement("input");
-
-  input.id    = "map";
-  input.name  = "map";
-  input.type  = "checkbox";
-  input.setAttribute("onchange",'$("form").submit()');
-  span.appendChild(input);
-
-  label.innerHTML = "Map?";
-  label.setAttribute("for","map");
-  span.appendChild(label);
-
-  form.appendChild(span);
+  // Profile
+  select        = document.createElement("select");
+  select.id     = "profile";
+  select.name   = "profile";
+  var profiles  = ["default","mm1"];
+  for(var p in profiles) {
+    p                 = profiles[p];
+    var option        = document.createElement("option");
+    option.value      = p;
+    option.innerHTML  = p.ucfirst();
+    select.appendChild(option);
+  }
+  select.setAttribute("onchange",'$("form").submit()');
+  form.innerHTML += "Profile: ";
+  form.appendChild(select);
   form.innerHTML += "<br />";
 
-  span  = document.createElement("span");
-  label = document.createElement("label");
-  input = document.createElement("input");
-  input.id    = "open";
-  input.name  = "open";
-  input.type  = "checkbox";
-  input.setAttribute("onchange",'$("map").checked="on";$("form").submit()');
-  span.appendChild(input);
+  $("options").appendChild(form);
 
-  label.innerHTML = "Open Mode?";
-  label.setAttribute("for","open");
-  span.appendChild(label);
-
-  form.appendChild(span);
-  form.innerHTML += "<br />";
-
-  $("map").checked          = isMap;
-  $("open").checked         = isOpen;
-  $("theme").selectedIndex  = themes.indexOf(selectedTheme.toLowerCase());
+  $("map").checked            = isMap;
+  $("open").checked           = isOpen;
+  $("theme").selectedIndex    = themes.indexOf(selectedTheme.toLowerCase());
+  $("profile").selectedIndex  = profiles.indexOf(selectedProfile.toLowerCase());
 
   if(isOpen) {
     var openChests = [56,57,58];

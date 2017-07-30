@@ -102,9 +102,12 @@ td {
   width:             884px;
   height:            448px;
 }
-#disclaimer {
+#disclaimer, #options {
   position: fixed;
   bottom:   0;
+}
+#options {
+  right: 0;
 }
 
 #caption {
