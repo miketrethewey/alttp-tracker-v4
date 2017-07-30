@@ -24,13 +24,13 @@ function toggle(label, mode = "advance") {
       count = "many";
     }
 
-    $(label).style.backgroundImage  = ("url(" + build_img_url("chest" + count) + ')');
+    change_bgimg(label,"chest" + count);
     $(label).title                  = cS.getTitle();
     $(label).classList.remove(label + '-' + curr);
     $(label).classList.add(label + '-' + items[label]);
 
     if($("dungeonChestMini" + x)) {
-      $("dungeonChestMini" + x).style.backgroundImage = ("url(" + build_img_url("chest" + count + "-mini") + ')');
+      change_bgimg("dungeonChestMini" + x,"chest" + count + "-mini");
       $("dungeonChestMini" + x).title = cS.getTitle();
     }
 
@@ -43,6 +43,7 @@ function toggle(label, mode = "advance") {
     }
 
     clear_selection();
+    check_counters();
     check_gomode();
     return;
   } else if(label.substring(0,5) == "count") {
@@ -61,6 +62,7 @@ function toggle(label, mode = "advance") {
     change_count(label,items[label]);
 
     clear_selection();
+    check_counters();
     check_gomode();
     return;
   }
@@ -90,12 +92,12 @@ function toggle(label, mode = "advance") {
     var bossSquare = (label.indexOf("boss") > -1 && label.length == 5);
 
     if(items[label] > itemsMin[label]) {
-      $(label).style.backgroundImage = ("url(" + build_img_url(label + items[label]) + ')');
+      change_bgimg(label,label + items[label]);
       if(! bossSquare) {
         $(label).className = ("true");
       }
     } else {
-      $(label).style.backgroundImage = ("url(" + build_img_url(label) + ')');
+      change_bgimg(label,label);
       if(! bossSquare) {
         $(label).className = ("false");
       }
@@ -111,9 +113,9 @@ function toggle(label, mode = "advance") {
           miniTheme = "vanilla";
         }
         if(items[label] > itemsMin[label]) {
-          ele.style.backgroundImage = "url(" + build_img_url(label + items[label], miniTheme) + ')';
+          change_bgimg(ele,label + items[label],miniTheme);
         } else {
-          ele.style.backgroundImage = "url(" + build_img_url(label, miniTheme) + ')';
+          change_bgimg(ele,label,miniTheme);
         }
         ele.classList.remove(label + '-' + curr);
         ele.classList.add(label + '-' + items[label]);
@@ -126,6 +128,7 @@ function toggle(label, mode = "advance") {
         }
       }
     }
+    check_counters();
   }
 
   if(isMap) {
@@ -170,15 +173,14 @@ function togglePearl() {
     link += "b";
   }
 
-  $("tunic").style.backgroundImage = "url(" + build_img_url(link) + ')';
-  $("tunic").classList.remove("false");
-  $("tunic").classList.add("true");
+  change_bgimg("tunic",link);
+  replace_class("tunic","false","true");
 
   var eles = document.getElementsByClassName("tunic");
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
-      ele.style.backgroundImage = "url(" + build_img_url(link,"vanilla") + ')';
+      change_bgimg(ele,link,"vanilla");
     }
   }
 }
@@ -219,23 +221,23 @@ function toggleBoss(x) {
 
 // Highlights a chest location and shows the name as caption
 function highlight(x) {
-  $(x).style.backgroundImage = "url(images/highlighted.png)";
+  change_bgimg(x,"highlighted");
   $("caption").innerHTML = chests[x].name;
 }
 
 function unhighlight(x) {
-  $(x).style.backgroundImage = "url(images/poi.png)";
+  change_bgimg(x,"poi");
   $("caption").innerHTML = "&nbsp;";
 }
 
 // Highlights a chest location and shows the name as caption (but for dungeons)
 function highlightDungeon(x) {
-  $("dungeon" + x).style.backgroundImage = "url(images/highlighted.png)";
+  change_bgimg("dungeon" + x,"highlighted");
   $("caption").innerHTML = dungeons[x].name;
 }
 
 function unhighlightDungeon(x) {
-  $("dungeon" + x).style.backgroundImage = "url(images/poi.png)";
+  change_bgimg("dungeon" + x,"poi");
   $("caption").innerHTML = "&nbsp;";
 }
 
@@ -257,9 +259,8 @@ function toggleDungeon(n, mode = "advance") {
     prizes[n] = min;
   }
 
-  $("dungeonPrize" + n).style.backgroundImage = "url(" + build_img_url("dungeon" + prizes[n]) + ')';
-  $("dungeonPrize" + n).classList.remove("dungeonPrize" + lastPrize)
-  $("dungeonPrize" + n).classList.add("dungeonPrize" + prizes[n]);
+  change_bgimg("dungeonPrize" + n,"dungeon" + prizes[n]);
+  replace_class("dungeonPrize" + n,"dungeonPrize" + lastPrize,"dungeonPrize" + prizes[n]);
 
   if(isMap) {
     // Update Sahasralah, Fat Fairy, and Master Sword Pedestal
@@ -293,16 +294,14 @@ function toggleMedallion(n, mode = "advance") {
 
   var medallionID = "medallion" + ((n == 0) ? 'M' : 'T')
 
-  $(medallionID).style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
-  $(medallionID).classList.remove("dungeonMedallion" + lastMedallion)
-  $(medallionID).classList.add("dungeonMedallion" + medallions[n]);
+  change_bgimg(medallionID,"medallion" + medallions[n]);
+  replace_class(medallionID,"dungeonMedallion" + lastMedallion,"dungeonMedallion" + medallions[n]);
   var eles = document.getElementsByClassName("dungeon" + medallionID.ucfirst());
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className.length > 0) {
-      ele.style.backgroundImage = "url(" + build_img_url("medallion" + medallions[n]) + ')';
-      ele.classList.remove("dungeonMedallion" + lastMedallion)
-      ele.classList.add("dungeonMedallion" + medallions[n]);
+      change_bgimg(ele,"medallion" + medallions[n]);
+      replace_class(ele,"dungeonMedallion" + lastMedallion,"dungeonMedallion" + medallions[n]);
     }
   }
 
@@ -618,9 +617,9 @@ function init() {
       chest = openChests[chest];
       toggleChest(chest);
     }
-    $("sword").style.backgroundImage  = "url(" + build_img_url("sword") + ')';
+    change_bgimg("sword","sword");
   } else {
-    $("sword").style.backgroundImage  = "url(" + build_img_url("sword1") + ')';
+    change_bgimg("sword","sword1");
   }
 
   var ids = ["tunic","sword","shield"];
@@ -633,18 +632,17 @@ function init() {
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
-      ele.style.backgroundImage = "url(" + build_img_url("tunic","vanilla") + ')';
+      change_bgimg(ele,"tunic","vanilla");
     }
   }
-  $("tunic").style.backgroundImage = "url(" + build_img_url("tunic") + ')';
+  change_bgimg("tunic","tunic");
 
   var eles = document.getElementsByClassName("moonpearl");
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
-      ele.style.backgroundImage = "url(" + build_img_url("moonpearl") + ')';
-      ele.classList.remove("true");
-      ele.classList.add("false");
+      change_bgimg(ele,"moonpearl");
+      replace_class(ele,"true","false");
     }
   }
 

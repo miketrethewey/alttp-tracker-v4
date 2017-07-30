@@ -331,9 +331,48 @@ function replace_class(id,oldClass,newClass) {
   }
 }
 
+function change_bgimg(ele,fname,miniTheme = "") {
+  if($(ele)) {
+    ele = $(ele);
+  }
+  ele.style.backgroundImage = "url(" + build_img_url(fname,miniTheme) + ')';
+}
+
 function change_title(id,title) {
   if($(id)) {
     $(id).title = title;
+  }
+}
+
+function check_counters() {
+  // Bottles
+  var bottleItemCounters  = 0;
+  var bottleCountSquare   = 0;
+
+  var checks = ["bottleItemA","bottleItemB","bottleItemC","bottleItemD"];
+  for(var check in checks) {
+    check = checks[check];
+    if($(check) && items[check] && items[check] > 0) {
+      bottleItemCounters++;
+    }
+  }
+
+  if($("countBottles") && $("countBottlesValue")) {
+    bottleCountSquare = $("countBottlesValue").innerHTML;
+  }
+
+  if(!items.bottle || (items.bottle < bottleItemCounters)) {
+    items.bottle = bottleItemCounters;
+    if(items.bottle) {
+      change_bgimg("bottle","bottle" + items["bottle"]);
+      replace_class("bottle","false","true");
+    } else {
+      change_bgimg("bottle","bottle");
+      replace_class("bottle","true","false");
+    }
+  }
+  if(bottleCountSquare < bottleItemCounters) {
+    change_count("countBottles",bottleItemCounters);
   }
 }
 

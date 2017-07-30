@@ -86,14 +86,17 @@ var items = {
     "quadLWBosses-boss0-boss1-boss2-agahnim": 0,
     "quadDWBosses1-boss3-boss4-boss5-boss6": 0,
     "triDWBosses2-boss7-boss8-boss9": 0,
+    countBottles: 0,
 };
 
-itemsMin["bottleItemA"] = 0;
-itemsMin["bottleItemB"] = 0;
-itemsMin["bottleItemC"] = 0;
-itemsMin["bottleItemD"] = 0;
+itemsMin["bottleItemA"]   = 0;
+itemsMin["bottleItemB"]   = 0;
+itemsMin["bottleItemC"]   = 0;
+itemsMin["bottleItemD"]   = 0;
+itemsMin["countBottles"]  = 0;
 
-itemsMax["bottleItemA"] = 6;
-itemsMax["bottleItemB"] = 6;
-itemsMax["bottleItemC"] = 6;
-itemsMax["bottleItemD"] = 6;
+itemsMax["bottleItemA"]   = 6;
+itemsMax["bottleItemB"]   = 6;
+itemsMax["bottleItemC"]   = 6;
+itemsMax["bottleItemD"]   = 6;
+itemsMax["countBottles"]  = 4;
