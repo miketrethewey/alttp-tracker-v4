@@ -292,11 +292,11 @@ function toggleMedallion(n, mode = "advance") {
     medallions[n] = min;
   }
 
-  var medallionID = "medallion" + ((n == 0) ? 'M' : 'T')
+  var medallionID = "dungeonMedallion" + ((n == 0) ? 'M' : 'T')
 
   change_bgimg(medallionID,"medallion" + medallions[n]);
   replace_class(medallionID,"dungeonMedallion" + lastMedallion,"dungeonMedallion" + medallions[n]);
-  var eles = document.getElementsByClassName("dungeon" + medallionID.ucfirst());
+  var eles = document.getElementsByClassName(medallionID);
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className.length > 0) {
