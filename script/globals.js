@@ -159,7 +159,7 @@ function change_count(id,count) {
     var digits = (count + "").split("");
     for(var digit in digits) {
       digit = digits[digit];
-      $(id + "IMG").innerHTML += '<img src="images/numbers/' + digit + '.png" class="countNumber" />';
+      $(id + "IMG").innerHTML += '<img src="' + build_img_url(digit) + '" class="countNumber" />';
     }
     $(id + "Value").innerHTML = count;
     items[id] = count;
@@ -195,10 +195,10 @@ function build_img_url(fname,useTheme = selectedTheme) {
 
   fname = fname.toLowerCase();
 
-  var checkForSupport         = ["bomb","boss","chest","agahnim","boss","dungeon","label","medallion0"];
+  var checkForSupport         = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0","mpupgrade", "pendant"];
   var supportedByTheme        = [];
-  supportedByTheme["retro"]   = ["boss","chest","agahnim","dungeon","medallion0"];
-  supportedByTheme["vanilla"] = ["dungeon","medallion0"];
+  supportedByTheme["retro"]   = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0","mpupgrade", "pendant"];
+  supportedByTheme["vanilla"] = ["agahnim", "bomb",               "dungeon",        "medallion0","mpupgrade",];
 
   var hasSupport = true;
   for(var check in checkForSupport) {
@@ -229,14 +229,30 @@ function build_img_url(fname,useTheme = selectedTheme) {
     medallion3: "quake",
     dungeon4:   "pendant0",
     tunic1:     "tunic",
-    ".png":     ""
+    ".png":     "",
   };
 
   for(var replace in globalReplace) {
     fname = fname.replace(replace,globalReplace[replace]);
   }
 
-  var noSupport = ["sword","shield","dungeon0","mpupgrade"];
+  var exactReplace = {
+    bomb:       "bomb1",
+    boomerang:  "boomerang1",
+    glove:      "glove1",
+  };
+  for(var replace in exactReplace) {
+    if(fname == replace) {
+      fname = exactReplace[replace];
+    }
+  }
+
+  var noSupport = [
+    "dungeon0",
+    "shield",
+    "sword",
+    "transparent",
+  ];
   if(noSupport.indexOf(fname) > -1) {
     hasSupport = false;
   }
@@ -258,6 +274,11 @@ function build_img_url(fname,useTheme = selectedTheme) {
     }
   }
 
+  if(isNumeric(fname)) {
+    var hasNumbers = ["retro"];
+    hasSupport = hasNumbers.indexOf(useTheme.toLowerCase()) > -1;
+
+}
   if(! hasSupport) {
     useTheme = "default";
   }
@@ -331,7 +352,7 @@ function replace_class(id,oldClass,newClass) {
   }
 }
 
-function change_bgimg(ele,fname,miniTheme = "") {
+function change_bgimg(ele,fname,miniTheme = selectedTheme) {
   if($(ele)) {
     ele = $(ele);
   }

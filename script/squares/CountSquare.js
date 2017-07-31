@@ -31,7 +31,7 @@ class CountSquare extends Square {
     span.classList.add("img");
 
     var img = document.createElement("img");
-    img.src = build_img_url("0","base");
+    img.src = build_img_url("0");
     img.classList.add("countNumber");
 
     span.appendChild(img);

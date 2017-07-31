@@ -59,7 +59,7 @@ var items = {
     bow:          0,
     "duoMerang-blumerang-redmerang":    0,
     hookshot:     false,
-    bomb:         false,
+    bomb:         0,
     "quadFetch-mushroom-powder-shovel-flute": false,
     "quadDungeonMedallions-label9-medallionT-label8-medallionM":   0,
     mpupgrade:    0,
@@ -89,12 +89,14 @@ var items = {
     countBottles: 0,
 };
 
+itemsMin["bomb"]          = 0;
 itemsMin["bottleItemA"]   = 0;
 itemsMin["bottleItemB"]   = 0;
 itemsMin["bottleItemC"]   = 0;
 itemsMin["bottleItemD"]   = 0;
 itemsMin["countBottles"]  = 0;
 
+itemsMax["bomb"]          = 2;
 itemsMax["bottleItemA"]   = 6;
 itemsMax["bottleItemB"]   = 6;
 itemsMax["bottleItemC"]   = 6;
