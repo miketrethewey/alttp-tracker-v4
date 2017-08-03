@@ -197,6 +197,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
 
   var checkForSupport           = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0", "mpupgrade",  "pendant"];
   var supportedByTheme          = [];
+  supportedByTheme["xmas"]      = ["agahnim",               "chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
@@ -287,6 +288,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   switch(useTheme) {
+    case "xmas":
+      themeRoot = "BONUS/DLC%20Icons/Christmas/";
+      break;
     case "metroid3":
       themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
       break;

@@ -513,6 +513,9 @@ function print_tracker() {
 }
 
 function init() {
+  var themes    = ["default","xmas","metroid3","retro","vanilla"];
+  var profiles  = ["default","mm1"];
+
   if(selectedProfile != "default") {
     var script = document.createElement("script");
     script.src = "script/profiles/items-" + selectedProfile + ".js";
@@ -624,7 +627,6 @@ function init() {
   var select  = document.createElement("select");
   select.id   = "theme";
   select.name = "theme";
-  var themes  = ["default","metroid3","retro","vanilla"];
   for(var t in themes) {
     t                 = themes[t];
     var option        = document.createElement("option");
@@ -641,7 +643,6 @@ function init() {
   select        = document.createElement("select");
   select.id     = "profile";
   select.name   = "profile";
-  var profiles  = ["default","mm1"];
   for(var p in profiles) {
     p                 = profiles[p];
     var option        = document.createElement("option");

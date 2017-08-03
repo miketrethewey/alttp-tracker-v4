@@ -981,7 +981,7 @@ chests[36] = {
 };
 
 chests[37] = {
-    name: "Lumberjack Tree " + mini("agahnim-check") + mini("boots"),
+    name: "Lumberjack Tree " + mini("agahnim") + mini("boots"),
     x: "15.1%",
     y: "7.6%",
     isOpened: false,
