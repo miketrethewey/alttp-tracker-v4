@@ -136,14 +136,28 @@ td {
 
 .available {
   background-color: rgb(0,255,0);
+  color:            rgb(0,0,0);
 }
 
 .possible {
   background-color: rgb(255,255,0);
+  color:            rgb(0,0,0);
+}
+
+.fakeflippers {
+  background-color: rgb(140,170,230);
+}
+
+.jesusdash {
+  background-color: rgb(80,100,170);
 }
 
 .dark {
-  background-color: rgb(0,0,255);
+  background-color: rgb(64,64,64);
+}
+
+.agahnim-check {
+  background-color: rgb(0,64,0);
 }
 
 .opened {

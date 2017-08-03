@@ -180,7 +180,7 @@ function togglePearl() {
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
-      change_bgimg(ele,link,"vanilla");
+      change_bgimg(ele,link,(stoopsLonkTheme() ? "vanilla" : selectedTheme));
     }
   }
 }
@@ -526,6 +526,56 @@ function init() {
     caption.id        = "caption";
     caption.innerHTML = "&nbsp;";
     $("mapDiv").appendChild(caption);
+
+    var table         = document.createElement("table");
+    var tr            = document.createElement("tr");
+    var th            = document.createElement("th");
+    table.style.position = "relative";
+    table.style.top = 450;
+    th.classList.add("available");
+    th.innerHTML = "Available";
+    tr.appendChild(th);
+
+    th = document.createElement("th");
+    th.classList.add("possible");
+    th.innerHTML = "Possible";
+    tr.appendChild(th);
+
+    th = document.createElement("th");
+    th.classList.add("unavailable");
+    th.innerHTML = "Unavailable";
+    tr.appendChild(th);
+
+    table.appendChild(tr);
+    tr = document.createElement("tr");
+
+    th = document.createElement("th");
+    th.classList.add("agahnim-check");
+    th.innerHTML = "Agahnim Defeated";
+    th.setAttribute("colspan",3);
+    tr.appendChild(th);
+
+    table.appendChild(tr);
+    tr = document.createElement("tr");
+
+    th = document.createElement("th");
+    th.classList.add("fakeflippers");
+    th.innerHTML = "Fake Flippers";
+    tr.appendChild(th);
+
+    th = document.createElement("th");
+    th.classList.add("jesusdash");
+    th.innerHTML = "Jesus Dash";
+    tr.appendChild(th);
+
+    th = document.createElement("th");
+    th.classList.add("dark");
+    th.innerHTML = "Dark Navigation";
+    tr.appendChild(th);
+
+    table.appendChild(tr);
+    $("mapDiv").appendChild(table);
+
     print_map_chests();
   } else {
     $("mapDiv").style.display = "none";
@@ -574,7 +624,7 @@ function init() {
   var select  = document.createElement("select");
   select.id   = "theme";
   select.name = "theme";
-  var themes  = ["default","retro","vanilla"];
+  var themes  = ["default","metroid3","retro","vanilla"];
   for(var t in themes) {
     t                 = themes[t];
     var option        = document.createElement("option");
@@ -632,7 +682,7 @@ function init() {
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
-      change_bgimg(ele,"tunic","vanilla");
+      change_bgimg(ele,"tunic",(stoopsLonkTheme() ? "vanilla" : selectedTheme));
     }
   }
   change_bgimg("tunic","tunic");

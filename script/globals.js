@@ -195,10 +195,11 @@ function build_img_url(fname,useTheme = selectedTheme) {
 
   fname = fname.toLowerCase();
 
-  var checkForSupport         = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0","mpupgrade", "pendant"];
-  var supportedByTheme        = [];
-  supportedByTheme["retro"]   = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0","mpupgrade", "pendant"];
-  supportedByTheme["vanilla"] = ["agahnim", "bomb",               "dungeon",        "medallion0","mpupgrade",];
+  var checkForSupport           = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0", "mpupgrade",  "pendant"];
+  var supportedByTheme          = [];
+  supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
+  supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
+  supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
 
   var hasSupport = true;
   for(var check in checkForSupport) {
@@ -249,6 +250,8 @@ function build_img_url(fname,useTheme = selectedTheme) {
 
   var noSupport = [
     "dungeon0",
+    "highlighted",
+    "poi",
     "shield",
     "sword",
     "transparent",
@@ -275,7 +278,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   if(isNumeric(fname)) {
-    var hasNumbers = ["retro"];
+    var hasNumbers = ["metroid3","retro"];
     hasSupport = hasNumbers.indexOf(useTheme.toLowerCase()) > -1;
 
 }
@@ -284,6 +287,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
   }
 
   switch(useTheme) {
+    case "metroid3":
+      themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
+      break;
     case "retro":
       themeRoot = "BONUS/DLC%20Icons/Retro/";
       break;
@@ -309,14 +315,66 @@ function mini(img) {
   return '<img src="' + build_img_url(img) + '" class="mini ' + img + '" />';
 }
 
+function canEnterAga1() {
+  return items.sword >= 2 || items.cape;
+}
+
+function canLiftRocks() {
+  return items.glove;
+}
+
+function canLiftDarkRocks() {
+  return items.glove > 1;
+}
+
+function canSwim() {
+  return items.flippers;
+}
+
 function steve() {
   if(!items.moonpearl) {
     return false;
   }
-  if(items.glove == 2 || (items.glove && items.hammer)) {
+  if(canLiftDarkRocks() || (canLiftRocks() && items.hammer)) {
     return true;
   }
-  return items.agahnim && items.hookshot && (items.hammer || items.glove || items.flippers);
+  return items.agahnim && items.hookshot && (items.hammer || canLiftRocks() || canSwim());
+}
+
+function stevelight() {
+  return items.moonpearl && items.hookshot && (items.hammer || canLiftRocks() || canSwim()) && canEnterAga1();
+}
+
+function canDash() {
+  return items.boots;
+}
+
+function canLightTorches() {
+  return items.firerod || items.lantern;
+}
+
+function canMeltThings() {
+  return items.bombos || items.firerod;
+}
+
+function canShootArrows() {
+  return items.bow > BOW_NONE && items.bow < SILVERS;
+}
+
+function haveLightCone() {
+  return items.lantern;
+}
+
+function haveMagicalSword() {
+  return items.sword >= 2;
+}
+
+function deathmountain() {
+  return items.flute || (canLiftRocks() && haveLightCone());
+}
+
+function deathmountaindarkness() {
+  return canLiftRocks();
 }
 
 function add_class(id,className) {
