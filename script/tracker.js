@@ -510,6 +510,7 @@ function init() {
     xmas:     "Christmas",
     gbc:      "GBC",
     mm:       "Mega Man",
+    mmx:      "Mega Man X",
     retro:    "Retro",
     metroid3: "Super Metroid",
     vanilla:  "Vanilla",

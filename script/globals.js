@@ -202,6 +202,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   supportedByTheme["gbc"]       = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["mm"]        = ["agahnim", "bomb",       "chest",];
+  supportedByTheme["mmx"]       = ["agahnim",               "chest",];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
 
@@ -306,6 +307,13 @@ function build_img_url(fname,useTheme = selectedTheme) {
     }
 
 }
+
+  if(useTheme == "mmx") {
+    if(["bombos","book","bow","bow1","bow2","bow3","ether","flippers","flute","glove1","glove2","hammer","hookshot","lantern","medallion0","mushroom","net","pendant0","pendant1","pendant2","powder","quake","shovel","somaria"].indexOf(fname) > -1) {
+      useTheme = "vanilla";
+    }
+
+}
   switch(useTheme) {
     case "xmas":
       themeRoot = "BONUS/DLC%20Icons/Christmas/";
@@ -318,6 +326,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
       break;
     case "mm":
       themeRoot = "BONUS/DLC%20Icons/Mega_Man/";
+      break;
+    case "mmx":
+      themeRoot = "BONUS/DLC%20Icons/Mega_Man_X/";
       break;
     case "retro":
       themeRoot = "BONUS/DLC%20Icons/Retro/";
