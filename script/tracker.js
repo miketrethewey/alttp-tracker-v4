@@ -659,10 +659,10 @@ function init() {
   select.id     = "profile";
   select.name   = "profile";
   for(var p in profiles) {
-    p                 = profiles[p];
+    var title         = profiles[p];
     var option        = document.createElement("option");
     option.value      = p;
-    option.innerHTML  = p.ucfirst();
+    option.innerHTML  = title;
     select.appendChild(option);
   }
   select.setAttribute("onchange",'$("form").submit()');
