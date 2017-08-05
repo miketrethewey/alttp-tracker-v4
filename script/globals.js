@@ -205,6 +205,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   supportedByTheme["mm"]        = ["agahnim", "bomb",       "chest",];
   supportedByTheme["mmx"]       = ["agahnim",               "chest",];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
+  supportedByTheme["zstyle"]    = ["agahnim", "bomb",               "dungeon",                                    "pendant"];
   supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
 
   if(useTheme == "gbc") {
@@ -296,8 +297,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   if(isNumeric(fname)) {
     var hasNumbers = ["metroid3","retro"];
     hasSupport = hasNumbers.indexOf(useTheme.toLowerCase()) > -1;
-
-}
+  }
   if(! hasSupport) {
     useTheme = "default";
   }
@@ -306,20 +306,18 @@ function build_img_url(fname,useTheme = selectedTheme) {
     if(["sword1","sword3","sword4","tunicb","tunic2b","tunic3b"].indexOf(fname) > -1) {
       filext = "gif";
     }
-
-}
+  }
 
   if(useTheme == "mmx") {
     if(["bombos","book","bow","bow1","bow2","bow3","ether","flippers","flute","glove1","glove2","hammer","hookshot","lantern","medallion0","mushroom","net","pendant0","pendant1","pendant2","powder","quake","shovel","somaria"].indexOf(fname) > -1) {
       useTheme = "vanilla";
     }
-
-} else if(useTheme == "minish") {
+  } else if(useTheme == "minish") {
     if(["dungeon1","dungeon2"].indexOf(fname) > -1) {
       useTheme = "default";
     }
+  }
 
-}
   switch(useTheme) {
     case "xmas":
       themeRoot = "BONUS/DLC%20Icons/Christmas/";
@@ -341,6 +339,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
       break;
     case "retro":
       themeRoot = "BONUS/DLC%20Icons/Retro/";
+      break;
+    case "zstyle":
+      themeRoot = "BONUS/DLC%20Icons/Zstyle/";
       break;
     case "vanilla":
       themeRoot = "BONUS/DLC%20Icons/Vanilla/";

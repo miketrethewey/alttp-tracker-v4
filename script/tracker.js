@@ -514,6 +514,7 @@ function init() {
     minish:   "Minish Cap",
     retro:    "Retro",
     metroid3: "Super Metroid",
+    zstyle:   "Zstyle",
     vanilla:  "Vanilla",
   };
   var profiles = {
