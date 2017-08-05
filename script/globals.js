@@ -192,6 +192,7 @@ function stoopsLonkTheme() {
 function build_img_url(fname,useTheme = selectedTheme) {
   var defaultRoot = "images/";
   var themeRoot   = defaultRoot;
+  var filext      = "png";
 
   fname = fname.toLowerCase();
 
@@ -200,6 +201,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   supportedByTheme["xmas"]      = ["agahnim",               "chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["gbc"]       = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
+  supportedByTheme["mm"]        = ["agahnim", "bomb",       "chest",];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
 
@@ -298,6 +300,12 @@ function build_img_url(fname,useTheme = selectedTheme) {
     useTheme = "default";
   }
 
+  if(useTheme == "mm") {
+    if(["sword1","sword3","sword4","tunicb","tunic2b","tunic3b"].indexOf(fname) > -1) {
+      filext = "gif";
+    }
+
+}
   switch(useTheme) {
     case "xmas":
       themeRoot = "BONUS/DLC%20Icons/Christmas/";
@@ -307,6 +315,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
       break;
     case "metroid3":
       themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
+      break;
+    case "mm":
+      themeRoot = "BONUS/DLC%20Icons/Mega_Man/";
       break;
     case "retro":
       themeRoot = "BONUS/DLC%20Icons/Retro/";
@@ -326,7 +337,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   } else if(isNumeric(fname)) {
     themeRoot += "numbers/";
   }
-  return themeRoot + fname + ".png";
+  return themeRoot + fname + '.' + filext;
 }
 
 function mini(img) {
