@@ -201,6 +201,7 @@ function build_img_url(fname,useTheme = selectedTheme) {
   supportedByTheme["xmas"]      = ["agahnim",               "chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["gbc"]       = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
+  supportedByTheme["minish"]    = ["agahnim", "bomb",               "dungeon",        "medallion0",               "pendant"];
   supportedByTheme["mm"]        = ["agahnim", "bomb",       "chest",];
   supportedByTheme["mmx"]       = ["agahnim",               "chest",];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
@@ -313,6 +314,11 @@ function build_img_url(fname,useTheme = selectedTheme) {
       useTheme = "vanilla";
     }
 
+} else if(useTheme == "minish") {
+    if(["dungeon1","dungeon2"].indexOf(fname) > -1) {
+      useTheme = "default";
+    }
+
 }
   switch(useTheme) {
     case "xmas":
@@ -323,6 +329,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
       break;
     case "metroid3":
       themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
+      break;
+    case "minish":
+      themeRoot = "BONUS/DLC%20Icons/Minish_Cap/";
       break;
     case "mm":
       themeRoot = "BONUS/DLC%20Icons/Mega_Man/";

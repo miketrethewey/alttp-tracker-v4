@@ -511,6 +511,7 @@ function init() {
     gbc:      "GBC",
     mm:       "Mega Man",
     mmx:      "Mega Man X",
+    minish:   "Minish Cap",
     retro:    "Retro",
     metroid3: "Super Metroid",
     vanilla:  "Vanilla",
