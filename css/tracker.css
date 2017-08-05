@@ -38,19 +38,14 @@ form {
 
 td {
   background-repeat: no-repeat;
+  background-size:   64px 64px;
   width:             64px;
   height:            64px;
 }
 
-.stoops {
-  background-size: 200% 200%;
-  width:           128;
-  height:          128;
-}
-
 .lonk {
-   width:  64px;
-   height: 64px;
+  width:  64px;
+  height: 64px;
 }
 
 .corner {

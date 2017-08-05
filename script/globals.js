@@ -198,9 +198,20 @@ function build_img_url(fname,useTheme = selectedTheme) {
   var checkForSupport           = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0", "mpupgrade",  "pendant"];
   var supportedByTheme          = [];
   supportedByTheme["xmas"]      = ["agahnim",               "chest","dungeon",        "medallion0",               "pendant"];
+  supportedByTheme["gbc"]       = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0",               "pendant"];
   supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
   supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
+
+  if(useTheme == "gbc") {
+    var useRetro = ["boots","chest","firerod","flippers","hookshot","icerod","mirror","numbers","shovel"];
+    for(var check in useRetro) {
+      check = useRetro[check];
+      if(fname.indexOf(check) > -1) {
+        useTheme = "retro";
+      }
+    }
+  }
 
   var hasSupport = true;
   for(var check in checkForSupport) {
@@ -290,6 +301,9 @@ function build_img_url(fname,useTheme = selectedTheme) {
   switch(useTheme) {
     case "xmas":
       themeRoot = "BONUS/DLC%20Icons/Christmas/";
+      break;
+    case "gbc":
+      themeRoot = "BONUS/DLC%20Icons/GBC/";
       break;
     case "metroid3":
       themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
@@ -392,6 +406,8 @@ function add_class(id,className) {
 }}
 
 function replace_class(id,oldClass,newClass) {
+  oldClass += "";
+  newClass += "";
   if($(id)) {
     if(oldClass != "") {
       $(id).classList.remove(oldClass);

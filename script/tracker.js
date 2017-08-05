@@ -25,9 +25,8 @@ function toggle(label, mode = "advance") {
     }
 
     change_bgimg(label,"chest" + count);
-    $(label).title                  = cS.getTitle();
-    $(label).classList.remove(label + '-' + curr);
-    $(label).classList.add(label + '-' + items[label]);
+    $(label).title = cS.getTitle();
+    replace_class(label,label + '-' + curr, label + '-' + items[label]);
 
     if($("dungeonChestMini" + x)) {
       change_bgimg("dungeonChestMini" + x,"chest" + count + "-mini");
@@ -60,22 +59,10 @@ function toggle(label, mode = "advance") {
     }
 
     change_count(label,items[label]);
-
-    clear_selection();
-    check_counters();
-    check_gomode();
-    return;
-  }
-  if((typeof items[label]) == "boolean") {
-    $(label).classList.remove(curr);
-    $(label).classList.add((items[label] = !items[label]));
-    for(var ele in eles) {
-    ele = eles[ele];
-    if(ele.className && ele.className.length > 0 && ele.className.indexOf(curr) > -1) {
-        ele.classList.remove(curr);
-        ele.classList.add(items[label]);
-      }
-    }
+  } else if((typeof items[label]) == "boolean") {
+    items[label] = !items[label];
+    replace_class(label,label + '-' + curr,label + '-' + items[label]);
+    replace_class(label,curr,items[label]);
   } else {
     if(mode == "advance") {
       items[label]++;
@@ -102,8 +89,7 @@ function toggle(label, mode = "advance") {
         $(label).className = ("false");
       }
     }
-    $(label).classList.remove(label + curr);
-    $(label).classList.add(label + items[label]);
+    replace_class(label,label + curr,label + items[label]);
 
     var miniTheme = selectedTheme;
     for(var ele in eles) {
@@ -128,7 +114,6 @@ function toggle(label, mode = "advance") {
         }
       }
     }
-    check_counters();
   }
 
   if(isMap) {
@@ -160,6 +145,7 @@ function toggle(label, mode = "advance") {
   }
 
   clear_selection();
+  check_counters();
   check_gomode();
 }
 
@@ -174,7 +160,8 @@ function togglePearl() {
   }
 
   change_bgimg("tunic",link);
-  replace_class("tunic","false","true");
+  $("tunic").classList.remove("false");
+  $("tunic").classList.add("true");
 
   var eles = document.getElementsByClassName("tunic");
   for(var ele in eles) {
@@ -211,8 +198,7 @@ function toggleBoss(x) {
       for(var ele in eles) {
         ele = eles[ele];
         if(ele.className && ele.className != "") {
-          ele.classList.remove(! dungeons[x].isBeaten);
-          ele.classList.add(dungeons[x].isBeaten);
+          replace_class(ele,!dungeons[x].isBeaten,dungeons[x].isBeaten);
         }
       }
     }
@@ -338,7 +324,10 @@ function build_lonk() {
   lonkTd.style.backgroundImage = "url(" + build_img_url("tunic") + ')';
   lonkTd.setAttribute("colspan",2);
   lonkTd.setAttribute("rowspan",2);
+  if(stoopsLonkTheme()) {
+    lonkTd.style.backgroundSize = "128px 128px";
 
+}
     // td table
   var lonkTable = document.createElement("table");
   lonkTable.className = "stoops";
@@ -473,8 +462,11 @@ function print_tracker() {
       var s  = [];
 
       if(squareID.indexOf("duo") > -1 || squareID.indexOf("tri") > -1 || squareID.indexOf("quad") > -1) {
-        var multiItems  = squareID.split('-');
-        id              = multiItems.shift();
+        var multiItems = [squareID];
+        if(squareID.indexOf('-') > -1) {
+          multiItems  = squareID.split('-');
+          id          = multiItems.shift();
+        }
         if(squareID.indexOf("duo") > -1) {
           s = new DuoSquare(id,multiItems);
         } else if(squareID.indexOf("tri") > -1) {
@@ -513,8 +505,18 @@ function print_tracker() {
 }
 
 function init() {
-  var themes    = ["default","xmas","metroid3","retro","vanilla"];
-  var profiles  = ["default","mm1"];
+  var themes = {
+    default:  "Default",
+    xmas:     "Christmas",
+    gbc:      "GBC",
+    retro:    "Retro",
+    metroid3: "Super Metroid",
+    vanilla:  "Vanilla",
+  };
+  var profiles = {
+    default:  "Default",
+    mm1:      "MM1",
+  };
 
   if(selectedProfile != "default") {
     var script = document.createElement("script");
@@ -577,6 +579,15 @@ function init() {
     tr.appendChild(th);
 
     table.appendChild(tr);
+    tr = document.createElement("tr");
+
+    th = document.createElement("th");
+    th.classList.add("opened");
+    th.innerHTML = "Opened";
+    th.setAttribute("colspan",3);
+    tr.appendChild(th);
+
+    table.appendChild(tr);
     $("mapDiv").appendChild(table);
 
     print_map_chests();
@@ -628,10 +639,10 @@ function init() {
   select.id   = "theme";
   select.name = "theme";
   for(var t in themes) {
-    t                 = themes[t];
+    var title         = themes[t];
     var option        = document.createElement("option");
     option.value      = t;
-    option.innerHTML  = t.ucfirst();
+    option.innerHTML  = title;
     select.appendChild(option);
   }
   select.setAttribute("onchange",'$("form").submit()');
@@ -659,8 +670,8 @@ function init() {
 
   $("map").checked            = isMap;
   $("open").checked           = isOpen;
-  $("theme").selectedIndex    = themes.indexOf(selectedTheme.toLowerCase());
-  $("profile").selectedIndex  = profiles.indexOf(selectedProfile.toLowerCase());
+  $("theme").selectedIndex    = Object.keys(themes).indexOf(selectedTheme.toLowerCase());
+  $("profile").selectedIndex  = Object.keys(profiles).indexOf(selectedProfile.toLowerCase());
 
   if(isOpen) {
     var openChests = [56,57,58];
