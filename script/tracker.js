@@ -8,15 +8,15 @@ function toggle(label, mode = "advance") {
     var cS  = new ChestSquare("chest" + x);
 
     if(mode == "advance") {
-      items[label]--;
+	  change_item_value(label,get_item_value(label) - 1);
     } else {
-      items[label]++;
+	  change_item_value(label,get_item_value(label) + 1);
     }
 
     if(items[label] < 0) {
-      items[label] = itemsMax[label];
+	  change_item_value(label,itemsMax[label]);
     } else if(items[label] > itemsMax[label]) {
-      items[label] = 0;
+	  change_item_value(label,0);
     }
 
     var count = items[label];
@@ -25,81 +25,76 @@ function toggle(label, mode = "advance") {
     }
 
     change_bgimg(label,"chest" + count);
-    $(label).title = cS.getTitle();
-    replace_class(label,label + '-' + curr, label + '-' + items[label]);
+    change_title(label,cS.getTitle());
+    replace_class(label,label + '-' + curr, label + '-' + get_item_value(label));
 
     if($("dungeonChestMini" + x)) {
       change_bgimg("dungeonChestMini" + x,"chest" + count + "-mini");
-      $("dungeonChestMini" + x).title = cS.getTitle();
+      change_title("dungeonChestMini" + x,cS.getTitle());
     }
 
     if(isMap && x != "e" && x != "gt") {
       if(items[label] == 0) {
-        $("dungeon" + x).className = "dungeon opened";
+        set_class("dungeon" + x, "dungeon opened");
       } else {
-        $("dungeon" + x).className = "dungeon " + dungeons[x].canGetChest();
+        set_class("dungeon" + x, "dungeon " + dungeons[x].canGetChest());
       }
     }
-
-    clear_selection();
-    check_counters();
-    check_gomode();
-    return;
   } else if(label.substring(0,5) == "count") {
     if(mode == "advance") {
-     items[label]++;
+	  change_item_value(label,get_item_value(label) + 1);
     } else {
-      items[label]--;
+	  change_item_value(label,get_item_value(label) - 1);
     }
 
     if(items[label] < 0) {
-      items[label] = itemsMax[label];
+	  change_item_value(label,itemsMax[label]);
     } else if(items[label] > itemsMax[label]) {
-      items[label] = 0;
+	  change_item_value(label,0);
     }
 
     change_count(label,items[label]);
   } else if((typeof items[label]) == "boolean") {
-    items[label] = !items[label];
-    replace_class(label,label + '-' + curr,label + '-' + items[label]);
-    replace_class(label,curr,items[label]);
+	change_item_value(label,!curr);
+    replace_class(label,label + '-' + curr,label + '-' + get_item_value(label));
+    replace_class(label,curr,get_item_value(label));
   } else {
     if(mode == "advance") {
-      items[label]++;
+	  change_item_value(label,get_item_value(label) + 1);
     } else {
-      items[label]--;
+	  change_item_value(label,get_item_value(label) - 1);
     }
 
     if(items[label] > itemsMax[label]) {
-      items[label] = itemsMin[label];
+	  change_item_value(label,itemsMin[label]);
     } else if(items[label] < itemsMin[label]) {
-      items[label] = itemsMax[label];
+	  change_item_value(label,itemsMax[label]);
     }
 
     var bossSquare = (label.indexOf("boss") > -1 && label.length == 5);
 
     if(items[label] > itemsMin[label]) {
-      change_bgimg(label,label + items[label]);
+      change_bgimg(label,label + get_item_value(label));
       if(! bossSquare) {
-        $(label).className = ("true");
+        replace_class(label,"false","true");
       }
     } else {
       change_bgimg(label,label);
       if(! bossSquare) {
-        $(label).className = ("false");
+        replace_class(label,"true","false");
       }
     }
-    replace_class(label,label + curr,label + items[label]);
+    replace_class(label,label + curr,label + get_item_value(label));
 
     var miniTheme = selectedTheme;
     for(var ele in eles) {
       ele = eles[ele];
-      if(ele.className && ele.className.length > 0 && ele.className.indexOf(label + '-' + curr) > -1) {
+      if(get_class(ele) && get_class(ele).indexOf(label + '-' + curr) > -1) {
         if(label.indexOf("tunic") > -1) {
           miniTheme = "vanilla";
         }
         if(items[label] > itemsMin[label]) {
-          change_bgimg(ele,label + items[label],miniTheme);
+          change_bgimg(ele,label + get_item_value(label),miniTheme);
         } else {
           change_bgimg(ele,label,miniTheme);
         }
@@ -119,15 +114,15 @@ function toggle(label, mode = "advance") {
   if(isMap) {
     for(k = 0; k < chests.length; k++) {
       if(!chests[k].isOpened) {
-        $(k).className = "chest " + chests[k].isAvailable();
+        set_class("chestMap" + k,"chest " + chests[k].isAvailable());
       }
     }
     for(k = 0; k < dungeons.length; k++) {
-      if(!dungeons[k].isBeaten) {
-        $("bossMap" + k).className = "boss " + dungeons[k].isBeatable();
-      }
-      if(items["chest"+k]) {
-        $("dungeon" + k).className = "dungeon " + dungeons[k].canGetChest();
+      if(!dungeons[k].isBeaten()) {
+        set_class("bossMap" + k, "boss " + dungeons[k].isBeatable());
+	  }
+      if(items["chest" + k]) {
+        set_class("dungeon" + k, "dungeon " + dungeons[k].canGetChest());
       }
     }
   }
@@ -160,14 +155,19 @@ function togglePearl() {
   }
 
   change_bgimg("tunic",link);
-  $("tunic").classList.remove("false");
-  $("tunic").classList.add("true");
+  replace_class("tunic","false","true");
 
   var eles = document.getElementsByClassName("tunic");
   for(var ele in eles) {
     ele = eles[ele];
-    if(ele.className && ele.className != "") {
-      change_bgimg(ele,link,(stoopsLonkTheme() ? "vanilla" : selectedTheme));
+    if(get_class(ele) != "") {
+      var miniTheme = selectedTheme;
+      if(stoopsLonkTheme()) {
+        if(ele.id && get_class(ele).indexOf("miniSquare") > -1) {
+          miniTheme = "vanilla";
+        }
+      }
+      change_bgimg(ele,link,miniTheme);
     }
   }
 }
@@ -176,19 +176,19 @@ function togglePearl() {
 function toggleChest(x) {
   chests[x].isOpened = !chests[x].isOpened;
   if(chests[x].isOpened) {
-    $(x).className = "chest opened";
+    set_class("chestMap" + x, "chest opened");
   } else {
-    $(x).className = "chest " + chests[x].isAvailable();
+    set_class("chestMap" + x, "chest " + chests[x].isAvailable());
   }
 }
 
 // Event of clicking a dungeon location (not really)
 function toggleBoss(x) {
-  dungeons[x].isBeaten = !dungeons[x].isBeaten;
-  if(dungeons[x].isBeaten) {
-    $("bossMap" + x).className = "boss opened";
+  dungeonbeaten[x] = !dungeonbeaten[x];
+  if(dungeons[x].isBeaten()) {
+    set_class("bossMap" + x, "boss opened");
   } else {
-    $("bossMap" + x).className = "boss " + dungeons[x].isBeatable();
+    set_class("bossMap" + x, "boss " + dungeons[x].isBeatable());
   }
   if(prizes[x] == GREEN_PENDANT) {
     var green = ["pendant0","pgreen"];
@@ -197,8 +197,8 @@ function toggleBoss(x) {
       var eles = document.getElementsByClassName(check);
       for(var ele in eles) {
         ele = eles[ele];
-        if(ele.className && ele.className != "") {
-          replace_class(ele,!dungeons[x].isBeaten,dungeons[x].isBeaten);
+        if(get_class(ele)) {
+          replace_class(ele,!dungeons[x].isBeaten(),dungeons[x].isBeaten());
         }
       }
     }
@@ -206,13 +206,13 @@ function toggleBoss(x) {
 }
 
 // Highlights a chest location and shows the name as caption
-function highlight(x) {
-  change_bgimg(x,"highlighted");
+function highlightChest(x) {
+  change_bgimg("chestMap" + x,"highlighted");
   $("caption").innerHTML = chests[x].name;
 }
 
-function unhighlight(x) {
-  change_bgimg(x,"poi");
+function unhighlightChest(x) {
+  change_bgimg("chestMap" + x,"poi");
   $("caption").innerHTML = "&nbsp;";
 }
 
@@ -253,7 +253,7 @@ function toggleDungeon(n, mode = "advance") {
     var pendantChests = [25, 61, 62];
     for(k = 0; k < pendantChests.length; k++) {
       if(!chests[pendantChests[k]].isOpened) {
-        document.getElementById(pendantChests[k]).className = "chest " + chests[pendantChests[k]].isAvailable();
+        set_class(pendantChests[k], "chest " + chests[pendantChests[k]].isAvailable());
       }
     }
   }
@@ -285,7 +285,7 @@ function toggleMedallion(n, mode = "advance") {
   var eles = document.getElementsByClassName(medallionID);
   for(var ele in eles) {
     ele = eles[ele];
-    if(ele.className && ele.className.length > 0) {
+    if(get_class(ele)) {
       change_bgimg(ele,"medallion" + medallions[n]);
       replace_class(ele,"dungeonMedallion" + lastMedallion,"dungeonMedallion" + medallions[n]);
     }
@@ -293,10 +293,10 @@ function toggleMedallion(n, mode = "advance") {
 
   if(isMap) {
     // Update availability of dungeon boss AND chests
-    dungeons[8 + n].isBeaten = !dungeons[8 + n].isBeaten;
+    dungeonbeaten[8 + n] = !dungeonbeaten[8 + n];
     toggleBoss(8 + n);
     if(items["chest" + (8 + n)] > 0) {
-      document.getElementById("dungeon" + (8 + n)).className = "dungeon " + dungeons[8 + n].canGetChest();
+      set_class("dungeon" + (8 + n), "dungeon " + dungeons[8 + n].canGetChest());
     }
     // TRock medallion affects Mimic Cave
     if(n == 1){
@@ -326,8 +326,8 @@ function build_lonk() {
   lonkTd.setAttribute("rowspan",2);
   if(stoopsLonkTheme()) {
     lonkTd.style.backgroundSize = "128px 128px";
+  }
 
-}
     // td table
   var lonkTable = document.createElement("table");
   lonkTable.className = "stoops";
@@ -504,7 +504,7 @@ function print_tracker() {
   }
 }
 
-function init() {
+function init_tracker() {
   var themes = {
     default:  "Default",
     xmas:     "Christmas",
@@ -526,8 +526,7 @@ function init() {
     var script = document.createElement("script");
     script.src = "script/profiles/items-" + selectedProfile + ".js";
     document.getElementsByTagName("head")[0].appendChild(script);
-
-}
+  }
   print_tracker();
 
   if(isMap) {

@@ -1,4 +1,4 @@
-var items = {
+var itemsInit = {
     tunic:      1,
     sword:      1,
     shield:     0,

@@ -58,7 +58,7 @@ class BossSquare extends Square {
       th = document.createElement("th");
 
       // Row 2 Cell 1
-      var count = itemsMax["chest" + this.dungeonID];
+      var count = dungeonchests[this.dungeonID];
       if(count > 9) {
         count = "many";
       }

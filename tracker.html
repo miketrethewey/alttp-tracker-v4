@@ -3,6 +3,16 @@
   <title>ALttP Rando Tracker by crossproduct v4.0 (modified by mm1)</title>
   <link rel="stylesheet" href="css/tracker.css" type="text/css" />
   <link rel="manifest" href="script/manifest.json" />
+  <script src="script/init.js"></script>
+  <script src="script/items/items-min.js"></script>
+  <script src="script/items/items-max.js"></script>
+  <script src="script/dungeonchests.js"></script>
+  <script src="script/dungeons.js"></script>
+  <script>
+  document.write("<scr" + "ipt src='script/profiles/items-"  +selectedProfile + ".js'></scr" + "ipt>");
+  </script>
+  <script src="script/chests.js"></script>
+  <script src="script/globals.js"></script>
   <script src="script/squares/Square.js"></script>
   <script src="script/squares/BossSquare.js"></script>
   <script src="script/squares/ChestSquare.js"></script>
@@ -12,15 +22,8 @@
   <script src="script/squares/QuadSquare.js"></script>
   <script src="script/squares/TriSquare.js"></script>
   <script src="script/squares/DuoSquare.js"></script>
-  <script src="script/globals.js"></script>
-  <script src="script/map.js"></script>
-  <script src="script/chests.js"></script>
   <script src="script/tracker.js"></script>
-  <script src="script/items/items-min.js"></script>
-  <script src="script/items/items-max.js"></script>
-  <script>
-  document.write("<scr" + "ipt src='script/profiles/items-"  +selectedProfile + ".js'></scr" + "ipt>");
-  </script>
+  <script src="script/map.js"></script>
 <style type="text/css">
 /* https://github.com/tholman/github-corners */
 .github-corner:hover .octo-arm {
@@ -62,7 +65,7 @@
   <div id="options"></div>
   <div id="disclaimer">Not supported by crossproduct. Please support the <a href="http://www.twitch.tv/crossproduct/">official release</a>.</div>
 <script>
-init();
+init_tracker();
 </script>
 </body>
 </html>

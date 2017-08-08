@@ -2,20 +2,20 @@ function print_map_chests() {
   // Initialize all chests on the map
   for(k = 0; k < chests.length; k++) {
     var span                    = document.createElement("span");
-    span.id                     = k;
+    span.id                     = "chestMap" + k;
     span.style.backgroundImage  = "url(images/poi.png)";
-    span.setAttribute("onclick",        "toggleChest('" + k + "')");
-    span.setAttribute("oncontextmenu",  "toggleChest('" + k + "')");
-    span.setAttribute("onmouseover",    "highlight("    + k + ")");
-    span.setAttribute("onmouseout",     "unhighlight("  + k + ")");
+    span.setAttribute("onclick",        "toggleChest('"       + k + "')");
+    span.setAttribute("oncontextmenu",  "toggleChest('"       + k + "')");
+    span.setAttribute("onmouseover",    "highlightChest("     + k + ")");
+    span.setAttribute("onmouseout",     "unhighlightChest("   + k + ")");
     $("mapDiv").appendChild(span);
 
-    $(k).style.left = chests[k].x;
-    $(k).style.top  = chests[k].y;
+    $("chestMap" + k).style.left = chests[k].x;
+    $("chestMap" + k).style.top  = chests[k].y;
     if(chests[k].isOpened) {
-      $(k).className = "chest opened";
+      set_class("chestMap" + k, "chest opened");
     } else {
-      $(k).className = "chest " + chests[k].isAvailable();
+      set_class("chestMap" + k, "chest " + chests[k].isAvailable());
     }
   }
 
@@ -30,7 +30,7 @@ function print_map_chests() {
 
     $("bossMap" + k).style.left = dungeons[k].x;
     $("bossMap" + k).style.top  = dungeons[k].y;
-    $("bossMap" + k).className  = "boss " + dungeons[k].isBeatable();
+    set_class("bossMap" + k, "boss " + dungeons[k].isBeatable());
 
     span = document.createElement("span");
     span.id                     = "dungeon" + k;
@@ -41,6 +41,6 @@ function print_map_chests() {
 
     $("dungeon" + k).style.left = dungeons[k].x;
     $("dungeon" + k).style.top  = dungeons[k].y;
-    $("dungeon" + k).className  = "dungeon " + dungeons[k].canGetChest();
+    set_class("dungeon" + k, "dungeon " + dungeons[k].canGetChest());
   }
 }

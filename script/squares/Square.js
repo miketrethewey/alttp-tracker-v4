@@ -30,7 +30,11 @@ class Square {
       square.classList.add("dungeonMedallion");
       square.classList.add("dungeonMedallion0");
       square.classList.add("dungeon" + medallionDungeon.ucfirst());
-    }
+	}
+
+	if(mode == "mini") {
+	  square.classList.add("miniSquare");
+	}
 
     return square;
   }

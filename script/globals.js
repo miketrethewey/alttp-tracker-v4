@@ -6,20 +6,19 @@ var BOW_NONE        = 0;
 var BOW_WOOD        = 1;
 var BOW_SLVR        = 2;
 var SILVERS         = 3;
-var rowLength       = 7;
-var prizes          = [];
-var medallions      = [0, 0];
-var isMap           = false;
-var isOpen          = false;
-var selectedTheme   = "default";
-var selectedProfile = "default";
+
+var items			= itemsInit;
+
+for(var i = 0; i < chests.length; i++) {
+  chestsopenedInit.push(false);
+}
+var chestsopened = chestsopenedInit;
 
 function $(e) {
   return document.getElementById(e);
 }
 
 Element.prototype.prependChild = function(child) { this.insertBefore(child, this.firstChild); };
-String.prototype.ucfirst = function () { return this.substr(0,1).toUpperCase() + this.slice(1); }
 
 function plural(input,revert = false) {
   var plural = {
@@ -134,10 +133,6 @@ function plural(input,revert = false) {
   return input;
 }
 
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
 /**
  *
  * @param string $id  Element ID
@@ -162,7 +157,7 @@ function change_count(id,count) {
       $(id + "IMG").innerHTML += '<img src="' + build_img_url(digit) + '" class="countNumber" />';
     }
     $(id + "Value").innerHTML = count;
-    items[id] = count;
+    change_item_value(id,count);
   }
 }
 
@@ -175,194 +170,8 @@ function clear_selection() {
   }
 }
 
-function getQuery(name, url) {
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-  results = regex.exec(url);
-  if (!results) return '';
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
 function stoopsLonkTheme() {
   return selectedTheme == "" || selectedTheme == "default" || selectedTheme == "retro";
-}
-
-function build_img_url(fname,useTheme = selectedTheme) {
-  var defaultRoot = "images/";
-  var themeRoot   = defaultRoot;
-  var filext      = "png";
-
-  fname = fname.toLowerCase();
-
-  var checkForSupport           = ["agahnim", "bomb","boss","chest","dungeon","label","medallion0", "mpupgrade",  "pendant"];
-  var supportedByTheme          = [];
-  supportedByTheme["xmas"]      = ["agahnim",               "chest","dungeon",        "medallion0",               "pendant"];
-  supportedByTheme["gbc"]       = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0",               "pendant"];
-  supportedByTheme["metroid3"]  = ["agahnim", "bomb",       "chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
-  supportedByTheme["minish"]    = ["agahnim", "bomb",               "dungeon",        "medallion0",               "pendant"];
-  supportedByTheme["mm"]        = ["agahnim", "bomb",       "chest",                  "medallion0",];
-  supportedByTheme["mmx"]       = ["agahnim",               "chest",];
-  supportedByTheme["retro"]     = ["agahnim", "bomb","boss","chest","dungeon",        "medallion0", "mpupgrade",  "pendant"];
-  supportedByTheme["zstyle"]    = ["agahnim", "bomb",               "dungeon",                                    "pendant"];
-  supportedByTheme["vanilla"]   = ["agahnim", "bomb",               "dungeon",        "medallion0", "mpupgrade",];
-
-  if(useTheme == "gbc") {
-    var useRetro = ["boots","chest","firerod","flippers","hookshot","icerod","mirror","numbers","shovel"];
-    for(var check in useRetro) {
-      check = useRetro[check];
-      if(fname.indexOf(check) > -1) {
-        useTheme = "retro";
-      }
-    }
-  }
-
-  var hasSupport = true;
-  for(var check in checkForSupport) {
-    check = checkForSupport[check];
-    if(fname.indexOf(check) > -1) {
-      hasSupport = false;
-      for(var supported in supportedByTheme[useTheme]) {
-        supported = supportedByTheme[useTheme][supported];
-        if(supported.indexOf(check) > -1) {
-          hasSupport = true;
-        }
-      }
-    }
-  }
-  if(fname == "bombos") {
-    hasSupport = true;
-  }
-
-  var globalReplace = {
-    blumerang:  "boomerang1",
-    bluemerang: "boomerang1",
-    redmerang:  "boomerang2",
-    crystal:    "dungeon1",
-    medallionM: "medallion0",
-    medallionT: "medallion0",
-    medallion1: "bombos",
-    medallion2: "ether",
-    medallion3: "quake",
-    dungeon4:   "pendant0",
-    tunic1:     "tunic",
-    ".png":     "",
-  };
-
-  for(var replace in globalReplace) {
-    fname = fname.replace(replace,globalReplace[replace]);
-  }
-
-  var exactReplace = {
-    bomb:       "bomb1",
-    boomerang:  "boomerang1",
-    glove:      "glove1",
-  };
-  for(var replace in exactReplace) {
-    if(fname == replace) {
-      fname = exactReplace[replace];
-    }
-  }
-
-  var noSupport = [
-    "dungeon0",
-    "highlighted",
-    "poi",
-    "shield",
-    "sword",
-    "transparent",
-  ];
-  if(noSupport.indexOf(fname) > -1) {
-    hasSupport = false;
-  }
-  if(fname.indexOf("nothing") > -1) {
-    fname       = "nothing";
-    hasSupport  = false;
-  }
-
-  if(fname.indexOf("bottleitem") > -1) {
-    fname = fname.replace('itema',"item");
-    fname = fname.replace('itemb',"item");
-    fname = fname.replace('itemc',"item");
-    fname = fname.replace('itemd',"item");
-    if(fname == "bottleitem" || fname == "bottleitem1") {
-      fname = "bottle";
-      if(useTheme == "retro" || useTheme == "gbc") {
-        fname += "item1";
-      }
-    }
-  }
-
-  if(isNumeric(fname)) {
-    var hasNumbers = ["metroid3","retro"];
-    hasSupport = hasNumbers.indexOf(useTheme.toLowerCase()) > -1;
-  }
-  if(! hasSupport) {
-    useTheme = "default";
-  }
-
-  if(useTheme == "mm") {
-    if(["sword1","sword3","sword4","tunicb","tunic2b","tunic3b"].indexOf(fname) > -1) {
-      filext = "gif";
-    }
-  }
-
-  if(useTheme == "mmx") {
-    if(["bombos","book","bow","bow1","bow2","bow3","ether","flippers","flute","glove1","glove2","hammer","hookshot","lantern","medallion0","mushroom","net","pendant0","pendant1","pendant2","powder","quake","shovel","somaria"].indexOf(fname) > -1) {
-      useTheme = "vanilla";
-    }
-  } else if(useTheme == "minish") {
-    if(["dungeon1","dungeon2"].indexOf(fname) > -1) {
-      useTheme = "default";
-    }
-  }
-
-  switch(useTheme) {
-    case "xmas":
-      themeRoot = "BONUS/DLC%20Icons/Christmas/";
-      break;
-    case "gbc":
-      themeRoot = "BONUS/DLC%20Icons/GBC/";
-      break;
-    case "metroid3":
-      themeRoot = "BONUS/DLC%20Icons/Super_Metroid/";
-      break;
-    case "minish":
-      themeRoot = "BONUS/DLC%20Icons/Minish_Cap/";
-      break;
-    case "mm":
-      themeRoot = "BONUS/DLC%20Icons/Mega_Man/";
-      break;
-    case "mmx":
-      themeRoot = "BONUS/DLC%20Icons/Mega_Man_X/";
-      break;
-    case "retro":
-      themeRoot = "BONUS/DLC%20Icons/Retro/";
-      break;
-    case "zstyle":
-      themeRoot = "BONUS/DLC%20Icons/Zstyle/";
-      break;
-    case "vanilla":
-      themeRoot = "BONUS/DLC%20Icons/Vanilla/";
-      break;
-    default:
-      themeRoot = defaultRoot;
-      break;
-  }
-
-  if(fname.indexOf("chest") > -1) {
-    themeRoot += "chests/";
-  } else if(fname.indexOf("boss") > -1) {
-    themeRoot += "bosses/";
-  } else if(isNumeric(fname)) {
-    themeRoot += "numbers/";
-  }
-  return themeRoot + fname + '.' + filext;
-}
-
-function mini(img) {
-  return '<img src="' + build_img_url(img) + '" class="mini ' + img + '" />';
 }
 
 function canEnterAga1() {
@@ -427,52 +236,126 @@ function deathmountaindarkness() {
   return canLiftRocks();
 }
 
-function add_class(id,className) {
-  if($(id)) {
+function action_class(ele,className,action) {
+  if(typeof ele == "string") {
+    ele = $(ele);
+  }
+
+  if(ele) {
     className = className.split(' ');
     for(str in className) {
       str = className[str];
-      $(id).classList.add(str);
-    }
-
-}}
-
-function replace_class(id,oldClass,newClass) {
-  oldClass += "";
-  newClass += "";
-  if($(id)) {
-    if(oldClass != "") {
-      $(id).classList.remove(oldClass);
-    }
-    if(newClass != "") {
-      $(id).classList.add(newClass);
+      if(action == "add") {
+        ele.classList.add(str);
+      } else if(action == "remove") {
+        ele.classList.remove(str);
+      }
     }
   }
-  var eles = document.getElementsByClassName(id);
+}
+
+function add_class(ele,className) {
+  action_class(ele,className,"add");
+}
+
+function remove_class(ele,className) {
+  action_class(ele,className,"remove");
+}
+
+function set_class(ele,className) {
+  if(typeof ele == "string") {
+    ele = $(ele);
+  }
+
+  if(ele) {
+    ele.className = className;
+  }
+}
+
+function replace_class(ele,oldClass,newClass) {
+  var thisClass = ele;
+  if(typeof ele == "string") {
+    ele = $(ele);
+  }
+
+  oldClass += "";
+  newClass += "";
+
+  if(ele) {
+    if(oldClass != "") {
+      remove_class(ele,oldClass);
+    }
+    if(newClass != "") {
+      add_class(ele,newClass);
+    }
+  }
+
+  var eles = document.getElementsByClassName(thisClass);
   for(var ele in eles) {
     ele = eles[ele];
     if(ele.className && ele.className != "") {
       if(oldClass != "") {
-        ele.classList.remove(oldClass);
+        remove_class(ele,oldClass);
       }
       if(newClass != "") {
-        ele.classList.add(newClass);
+        add_class(ele,newClass);
       }
     }
   }
 }
 
-function change_bgimg(ele,fname,miniTheme = selectedTheme) {
-  if($(ele)) {
+function get_class(ele) {
+  var ret = false;
+  if(typeof ele == "string") {
     ele = $(ele);
   }
-  ele.style.backgroundImage = "url(" + build_img_url(fname,miniTheme) + ')';
+  if(ele) {
+    if(ele.className) {
+      if(ele.className.length > 0) {
+        if(ele.className != "") {
+          ret = ele.className;
+        }
+      }
+    }
+  }
+  return ret;
 }
 
-function change_title(id,title) {
-  if($(id)) {
-    $(id).title = title;
+function change_bgimg(ele,fname,miniTheme = selectedTheme) {
+  if(typeof ele == "string") {
+    ele = $(ele);
   }
+  if(ele) {
+    ele.style.backgroundImage = "url(" + build_img_url(fname,miniTheme) + ')';
+  }
+}
+
+function get_bgimg(ele) {
+  var bgimg = false;
+  if(typeof ele == "string") {
+    ele = $(ele);
+  }
+  if(ele) {
+    bgimg = ele.style.backgroundImage;
+  }
+  return bgimg;
+}
+
+function change_title(ele,title) {
+  if(typeof ele == "string") {
+    ele = $(ele);
+  }
+  if(ele) {
+    ele.title = title;
+  }
+}
+
+function change_item_value(item,value) {
+  items[item] = value;
+}
+
+function get_item_value(item) {
+  return items[item];
 }
 
 function check_counters() {
@@ -493,7 +376,7 @@ function check_counters() {
   }
 
   if(!items.bottle || (items.bottle < bottleItemCounters)) {
-    items.bottle = bottleItemCounters;
+	change_item_value("bottle",bottleItemCounters);
     if(items.bottle) {
       change_bgimg("bottle","bottle" + items["bottle"]);
       replace_class("bottle","false","true");
@@ -538,18 +421,18 @@ function check_gomode() {
     var prizeImg  = $("dungeonPrize" + i);
     var bossImg   = $("boss" + i);
 
-    prizeImg  = prizeImg  != null ? prizeImg.style.backgroundImage  : "";
-    bossImg   = bossImg   != null ? bossImg.style.backgroundImage   : "";
+    prizeImg  = prizeImg  != null ? get_bgimg(prizeImg)  : "";
+    bossImg   = bossImg   != null ? get_bgimg(bossImg)   : "";
 
     if(prizeImg != "" && bossImg != "") {
       if(dungeons[i].isBeatable() == "available") {
         beatableTotal++;
       }
-      if(dungeons[i].isBeaten) {
+      if(dungeons[i].isBeaten()) {
         if(prizeImg.indexOf("dungeon" + GREEN_PENDANT) > -1) {
           var check = check_checkmark("pgreen"); // Check if we have a checkmark for this tracker
           if(check == 3) {
-            change_class("pendantsSquarePgreenIMG","true done");
+            set_class("pendantsSquarePgreenIMG","true done");
           }
         } else if(prizeImg.indexOf("dungeon" + OTHER_PENDANT) > -1) {
           acquiredOtherPendants++;
@@ -571,7 +454,7 @@ function check_gomode() {
       }
 
       if(prizeImg.indexOf("dungeon" + OTHER_CRYSTAL) > -1 || prizeImg.indexOf("dungeon" + OJ_CRYSTAL) > -1) {
-        if(dungeons[i].isBeaten) {
+        if(dungeons[i].isBeaten()) {
           availableCrystals++;
           acquiredCrystals++;
         } else if(dungeons[i].isBeatable() == "available" || dungeons[i].isBeatable() == "possible") {
@@ -618,8 +501,3 @@ function check_gomode() {
 
   clear_selection();
 }
-
-selectedTheme   = getQuery("theme")   != "" ? getQuery("theme")   : "default";
-selectedProfile = getQuery("profile") != "" ? getQuery("profile") : "default";
-isMap           = getQuery("map")     != "";
-isOpen          = getQuery("open")    != "";
