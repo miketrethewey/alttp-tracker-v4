@@ -917,8 +917,8 @@ chests[62] = {
 
 chests[63] = {
     name: "Waterfall of Wishing",
-    x: "35.3%",
-    y: "26.4%",
+    x: "45%",
+    y: "14.5%",
     isOpened: false,
     isAvailable: function() {
       if(canSwim()) {
